@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ShrinkiFly - Image Compressor</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 2rem auto;
+      background: #f9fafb;
+      color: #111827;
+      text-align: center;
+      padding: 1rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 12px;
+    }
+    input, select {
+      margin: 1rem 0;
+      padding: 0.5rem;
+      width: 100%;
+      max-width: 300px;
+      font-size: 1rem;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+    }
+    button {
+      margin-top: 1.5rem;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      background-color: #4F46E5;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:disabled {
+      background: #999;
+      cursor: not-allowed;
+    }
+    #previewContainer img {
+      margin-top: 1rem;
+      max-width: 100%;
+      max-height: 300px;
+      border-radius: 8px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.15);
+    }
+    .download-link {
+      display: inline-block;
+      margin-top: 1rem;
+      font-weight: bold;
+      color: #14B8A6;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    #dropArea {
+      display: none;
+      border: 2px dashed #4F46E5;
+      padding: 2rem;
+      margin: 1rem 0;
+      border-radius: 10px;
+      cursor: pointer;
+      background: #fff;
+    }
+    #dropArea.dragover {
+      background-color: #e0e7ff;
+    }
+    #downloadAllBtn {
+      display: none;
+      margin-top: 1rem;
+      background-color: #10B981;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 style="font-size: 40px; color: rgb(79, 70, 229)"><img src="/images/shrinkiflyLogo.svg" alt="ShrinkiFly Image Compressor Logo">ShrinkiFly</h1>
+  <p>Fast & Easy Image Compression</p>
+  <p id="status">Mode: <strong id="mode">Free</strong></p>
+
+  <div id="dropArea">Drag and drop your image(s) here or click to select</div>
+  <input type="file" id="fileInput" accept="image/*" />
+
+  <label for="formatSelect">Select output format:</label>
+  <select id="formatSelect">
+    <option value="image/jpeg">JPEG</option>
+    <option value="image/png">PNG</option>
+    <option value="image/webp">WebP</option>
+  </select>
+
+  <label for="qualityRange">Compression quality (JPEG/WebP): <span id="qualityValue">0.8</span></label>
+  <input type="range" id="qualityRange" min="0.1" max="1" step="0.05" value="0.8" />
+
+  <button id="compressBtn">Compress & Convert</button>
+  <button id="downloadAllBtn">Download All as ZIP</button>
+
+  <div id="previewContainer"></div>
+
+  <div style="margin-top:2rem">
+    <label for="licenseKey">Have a Pro license?</label><br>
+    <input type="text" id="licenseKey" placeholder="Enter your license key" style="width:100%;padding:0.5rem;" />
+    <button onclick="verifyLicense()" style="margin-top:1rem;">Unlock Pro</button>
+  </div>
+
+<script>
+  const fileInput = document.getElementById('fileInput');
+  const dropArea = document.getElementById('dropArea');
+  const formatSelect = document.getElementById('formatSelect');
+  const qualityRange = document.getElementById('qualityRange');
+  const qualityValue = document.getElementById('qualityValue');
+  const compressBtn = document.getElementById('compressBtn');
+  const downloadAllBtn = document.getElementById('downloadAllBtn');
+  const previewContainer = document.getElementById('previewContainer');
+  const licenseKeyInput = document.getElementById("licenseKey");
+  const modeText = document.getElementById("mode");
+
+  let isPro = false;
+  let uploadedFiles = [];
+  let compressedBlobs = [];
+
+  function verifyLicense() {
+    const key = licenseKeyInput.value.trim();
+    if (!key) return alert("Enter a license key.");
+
+    if (key === "ADMIN-KEY-1234") {
+      isPro = true;
+      modeText.innerText = "Admin";
+      fileInput.multiple = true;
+      dropArea.style.display = 'block';
+      enableDropArea();
+      alert("Admin access granted. Batch upload and drag-and-drop unlocked.");
+      return;
+    }
+
+    fetch("https://api.lemonsqueezy.com/v1/license-keys/validate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_API_KEY_HERE"
+      },
+      body: JSON.stringify({ license_key: key })
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.valid) {
+          isPro = true;
+          modeText.innerText = "Pro";
+          fileInput.multiple = true;
+          dropArea.style.display = 'block';
+          enableDropArea();
+          alert("Pro unlocked! Batch upload and drag-and-drop enabled.");
+        } else {
+          alert("Invalid license key.");
+        }
+      });
+  }
+
+  function enableDropArea() {
+    dropArea.addEventListener('click', () => fileInput.click());
+
+    dropArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropArea.classList.add('dragover');
+    });
+
+    dropArea.addEventListener('dragleave', () => {
+      dropArea.classList.remove('dragover');
+    });
+
+    dropArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropArea.classList.remove('dragover');
+      const dtFiles = e.dataTransfer.files;
+      if (dtFiles.length > 0) {
+        handleFiles(dtFiles);
+        fileInput.files = dtFiles;
+      }
+    });
+  }
+
+  qualityRange.addEventListener('input', () => {
+    qualityValue.textContent = qualityRange.value;
+  });
+
+  compressBtn.addEventListener('click', () => {
+    if (!uploadedFiles.length) return alert('Please upload at least one image.');
+
+    if (!isPro && uploadedFiles.length > 1) {
+      alert('Batch upload is Pro only. Please upload one image or unlock Pro.');
+      return;
+    }
+
+    previewContainer.innerHTML = '';
+    compressedBlobs = [];
+
+    uploadedFiles.forEach((file, index) => {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const maxWidth = 1024;
+          const scale = Math.min(1, maxWidth / img.width);
+          canvas.width = img.width * scale;
+          canvas.height = img.height * scale;
+
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+          const selectedFormat = formatSelect.value;
+          const quality = selectedFormat === 'image/png' ? undefined : parseFloat(qualityRange.value);
+
+          canvas.toBlob((blob) => {
+            compressedBlobs.push({ blob, name: `compressed_${file.name.split('.')[0]}.${selectedFormat.split('/')[1]}` });
+
+            const compressedUrl = URL.createObjectURL(blob);
+            const previewImg = document.createElement('img');
+            previewImg.src = compressedUrl;
+            previewContainer.appendChild(previewImg);
+
+            const downloadLink = document.createElement('a');
+            downloadLink.href = compressedUrl;
+            downloadLink.download = `compressed_${file.name.split('.')[0]}.${selectedFormat.split('/')[1]}`;
+            downloadLink.className = 'download-link';
+            downloadLink.innerText = 'Download Compressed Image';
+            previewContainer.appendChild(downloadLink);
+
+            if (compressedBlobs.length === uploadedFiles.length && uploadedFiles.length > 1) {
+              downloadAllBtn.style.display = 'inline-block';
+            }
+          }, selectedFormat, quality);
+        }
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+
+  downloadAllBtn.addEventListener('click', () => {
+    const zip = new JSZip();
+    compressedBlobs.forEach(({ blob, name }) => {
+      zip.file(name, blob);
+    });
+    zip.generateAsync({ type: "blob" }).then(function(content) {
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(content);
+      link.download = "compressed_images.zip";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  });
+
+  fileInput.addEventListener('change', (e) => {
+    handleFiles(e.target.files);
+  });
+
+  function handleFiles(files) {
+    uploadedFiles = Array.from(files);
+    if (!isPro && uploadedFiles.length > 1) {
+      alert("Pro required for batch upload. Only the first file will be used.");
+      uploadedFiles = [uploadedFiles[0]];
+    }
+  }
+</script>
+</body>
+</html>
