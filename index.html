@@ -146,11 +146,10 @@
       return;
     }
 
-    fetch("https://api.lemonsqueezy.com/v1/license-keys/validate", {
+    fetch("/.netlify/functions/validate-license", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NGQ1OWNlZi1kYmI4LTRlYTUtYjE3OC1kMjU0MGZjZDY5MTkiLCJqdGkiOiJiOGMyMGU1NTg3MmI5ZGFmZTU3OGMxN2E4YWVlNzkyMmNkZDdlMzg0YjAyZWIxZTBlYWJlMjY4MzE0NTgzOTU0YzIyM2RhY2QxZmEwMjllMiIsImlhdCI6MTc1NDMxODE5MS45OTI2MTEsIm5iZiI6MTc1NDMxODE5MS45OTI2MTQsImV4cCI6MjA2OTg1MDk5MS45NTI3MzgsInN1YiI6IjQ5NjgzMTciLCJzY29wZXMiOltdfQ.OpI4us20qM9A09if3xlOhhoQGMz6Cw3I4fW4HR7g3p9fXkMULwBnptrqZthTlJ19v8vQyG72_wIoejJBd5b8FwonYNR_M4ZM9_gUBup1YZVTLWfzzTTGJAyRACRJ1aNuEl12ypbwlY9ae5hmB__pb_Vm0xyogePzXnhuca48aImaKj_1-pEqZ-chFgh3cj0QJhhHvfJ6889YMHftafZug6--LPXW_sm-TJ6FfkAA5ECiK3C-SoFYOxLtc9bwJkMalhVpwoZNPZo7BV4q7iC9q3IcNRiZPTVLWXlrLXIRKvHjQyv14o8U5D3uj-cfk-tMIwtnClbV6HqiN9hj-nM55TLVpOpBqtjAaVzhd1a12bxKh84JNKY-cUdo96IK09r_3VwIsx_hLGnaexY5gN17-BG0ZDsIXjjvi3ZH9UQdbpgSxjXfIiiVvsRC9-APS9ptsDhtW4hnbTqfTyn_XZJg6G-iyuWzXjz0gdi933oUTP47boGJZDHjCAX01NuXIcjG // << INSERT your real Lemon Squeezy API key
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({ license_key: key })
     })
