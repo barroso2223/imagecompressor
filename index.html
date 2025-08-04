@@ -83,7 +83,9 @@
 </head>
 <body>
 
-  <h1 style="font-size: 40px; color: rgb(79, 70, 229)"><img src="/images/shrinkiflyLogo.svg" alt="ShrinkiFly Image Compressor Logo">ShrinkiFly</h1>
+  <h1 style="font-size: 40px; color: rgb(79, 70, 229)">
+    <img src="/images/shrinkiflyLogo.svg" alt="ShrinkiFly Logo"> ShrinkiFly
+  </h1>
   <p>Fast & Easy Image Compression</p>
   <p id="status">Mode: <strong id="mode">Free</strong></p>
 
@@ -148,27 +150,28 @@
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer YOUR_API_KEY_HERE"
+        "Authorization": eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NGQ1OWNlZi1kYmI4LTRlYTUtYjE3OC1kMjU0MGZjZDY5MTkiLCJqdGkiOiJiOGMyMGU1NTg3MmI5ZGFmZTU3OGMxN2E4YWVlNzkyMmNkZDdlMzg0YjAyZWIxZTBlYWJlMjY4MzE0NTgzOTU0YzIyM2RhY2QxZmEwMjllMiIsImlhdCI6MTc1NDMxODE5MS45OTI2MTEsIm5iZiI6MTc1NDMxODE5MS45OTI2MTQsImV4cCI6MjA2OTg1MDk5MS45NTI3MzgsInN1YiI6IjQ5NjgzMTciLCJzY29wZXMiOltdfQ.OpI4us20qM9A09if3xlOhhoQGMz6Cw3I4fW4HR7g3p9fXkMULwBnptrqZthTlJ19v8vQyG72_wIoejJBd5b8FwonYNR_M4ZM9_gUBup1YZVTLWfzzTTGJAyRACRJ1aNuEl12ypbwlY9ae5hmB__pb_Vm0xyogePzXnhuca48aImaKj_1-pEqZ-chFgh3cj0QJhhHvfJ6889YMHftafZug6--LPXW_sm-TJ6FfkAA5ECiK3C-SoFYOxLtc9bwJkMalhVpwoZNPZo7BV4q7iC9q3IcNRiZPTVLWXlrLXIRKvHjQyv14o8U5D3uj-cfk-tMIwtnClbV6HqiN9hj-nM55TLVpOpBqtjAaVzhd1a12bxKh84JNKY-cUdo96IK09r_3VwIsx_hLGnaexY5gN17-BG0ZDsIXjjvi3ZH9UQdbpgSxjXfIiiVvsRC9-APS9ptsDhtW4hnbTqfTyn_XZJg6G-iyuWzXjz0gdi933oUTP47boGJZDHjCAX01NuXIcjG // << INSERT your real Lemon Squeezy API key
       },
       body: JSON.stringify({ license_key: key })
     })
-      .then(res => res.json())
-      .then(data => {
-        if (data.valid) {
-          isPro = true;
-          modeText.innerText = "Pro";
-          fileInput.multiple = true;
-          dropArea.style.display = 'block';
-          enableDropArea();
-          alert("Pro unlocked! Batch upload and drag-and-drop enabled.");
-        } else {
-          alert("Invalid license key.");
-        }
-      })
-      .catch(err => {
-        console.error("License validation error:", err);
-        alert("An error occurred validating your license.");
-      });
+    .then(res => res.json())
+    .then(data => {
+      console.log("License validation response:", data);
+      if (data.valid) {
+        isPro = true;
+        modeText.innerText = "Pro";
+        fileInput.multiple = true;
+        dropArea.style.display = 'block';
+        enableDropArea();
+        alert("Pro unlocked! Batch upload and drag-and-drop enabled.");
+      } else {
+        alert("Invalid license key.");
+      }
+    })
+    .catch(err => {
+      console.error("License validation error:", err);
+      alert("An error occurred validating your license.");
+    });
   }
 
   function enableDropArea() {
@@ -209,7 +212,7 @@
     previewContainer.innerHTML = '';
     compressedBlobs = [];
 
-    uploadedFiles.forEach((file, index) => {
+    uploadedFiles.forEach((file) => {
       const reader = new FileReader();
       reader.onload = function(event) {
         const img = new Image();
