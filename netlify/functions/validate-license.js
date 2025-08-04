@@ -1,9 +1,11 @@
-exports.handler = async function(event, context) {
-  try {
-    const { license_key, instance_name } = JSON.parse(event.body);
+const fetch = require('node-fetch');
 
-    // Call LemonSqueezy activate license endpoint
-    const response = await fetch("https://api.lemonsqueezy.com/v1/licenses/activate", {
+exports.handler = async function(event) {
+  try {
+    const { license_key, instance_id, instance_name } = JSON.parse(event.body);
+
+    // Step 1: Activate the license
+    const activationResponse = await fetch("https://api.lemonsqueezy.com/v1/licenses/activate", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${process.env.LEMONSQUEEZY_API_KEY}`,
@@ -11,24 +13,32 @@ exports.handler = async function(event, context) {
       },
       body: JSON.stringify({
         license_key,
-        instance_name,  // unique device identifier from client
-        metadata: { source: "image-compressor-app" } // optional metadata
+        instance_id,      // Optional: uniquely identify the device/browser
+        instance_name,    // Optional: user-readable name
+        metadata: { source: "shrinkifly" }
       })
     });
 
-    const data = await response.json();
-    console.log("License activation response:", data);
+    const activationData = await activationResponse.json();
+    console.log("License activation response:", activationData);
 
-    // Determine if valid: activated successfully and no error
-    const isValid = data.activated === true && !data.error;
+    const license = activationData.license_key || {};
+    const isValid = activationData.activated === true && license.status === 'active';
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ valid: isValid, data })
+      body: JSON.stringify({
+        valid: isValid,
+        data: {
+          license_key: license,
+          instance: activationData.instance || null,
+          meta: activationData.meta || null
+        }
+      })
     };
 
   } catch (error) {
-    console.error("License activation error:", error);
+    console.error("License validation error:", error);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: error.message })
