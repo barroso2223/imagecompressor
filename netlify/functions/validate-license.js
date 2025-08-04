@@ -1,11 +1,12 @@
-const fetch = require('node-fetch');
+// validate-license.js (Netlify serverless function)
 
-exports.handler = async function(event) {
+const fetch = require("node-fetch");
+
+exports.handler = async function(event, context) {
   try {
     const { license_key, instance_id, instance_name } = JSON.parse(event.body);
 
-    // Step 1: Activate the license
-    const activationResponse = await fetch("https://api.lemonsqueezy.com/v1/licenses/activate", {
+    const response = await fetch("https://api.lemonsqueezy.com/v1/licenses/activate", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${process.env.LEMONSQUEEZY_API_KEY}`,
@@ -13,32 +14,24 @@ exports.handler = async function(event) {
       },
       body: JSON.stringify({
         license_key,
-        instance_id,      // Optional: uniquely identify the device/browser
-        instance_name,    // Optional: user-readable name
+        instance_id,
+        instance_name,
         metadata: { source: "shrinkifly" }
       })
     });
 
-    const activationData = await activationResponse.json();
-    console.log("License activation response:", activationData);
+    const data = await response.json();
+    console.log("License activation response:", data);
 
-    const license = activationData.license_key || {};
-    const isValid = activationData.activated === true && license.status === 'active';
+    const isValid = data.activated === true && !data.error;
 
     return {
       statusCode: 200,
-      body: JSON.stringify({
-        valid: isValid,
-        data: {
-          license_key: license,
-          instance: activationData.instance || null,
-          meta: activationData.meta || null
-        }
-      })
+      body: JSON.stringify({ valid: isValid, data })
     };
 
   } catch (error) {
-    console.error("License validation error:", error);
+    console.error("License activation error:", error);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: error.message })
