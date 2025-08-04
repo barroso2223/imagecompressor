@@ -108,7 +108,7 @@
   <div style="margin-top:2rem">
     <label for="licenseKey">Have a Pro license?</label><br>
     <input type="text" id="licenseKey" placeholder="Enter your license key" style="width:100%;padding:0.5rem;" />
-    <button onclick="verifyLicense()" style="margin-top:1rem;">Unlock Pro</button>
+    <button id="unlockBtn" style="margin-top:1rem;">Unlock Pro</button>
   </div>
 
 <script>
@@ -121,11 +121,14 @@
   const downloadAllBtn = document.getElementById('downloadAllBtn');
   const previewContainer = document.getElementById('previewContainer');
   const licenseKeyInput = document.getElementById("licenseKey");
+  const unlockBtn = document.getElementById("unlockBtn");
   const modeText = document.getElementById("mode");
 
   let isPro = false;
   let uploadedFiles = [];
   let compressedBlobs = [];
+
+  unlockBtn.addEventListener("click", verifyLicense);
 
   function verifyLicense() {
     const key = licenseKeyInput.value.trim();
@@ -145,7 +148,7 @@
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NGQ1OWNlZi1kYmI4LTRlYTUtYjE3OC1kMjU0MGZjZDY5MTkiLCJqdGkiOiJiOGMyMGU1NTg3MmI5ZGFmZTU3OGMxN2E4YWVlNzkyMmNkZDdlMzg0YjAyZWIxZTBlYWJlMjY4MzE0NTgzOTU0YzIyM2RhY2QxZmEwMjllMiIsImlhdCI6MTc1NDMxODE5MS45OTI2MTEsIm5iZiI6MTc1NDMxODE5MS45OTI2MTQsImV4cCI6MjA2OTg1MDk5MS45NTI3MzgsInN1YiI6IjQ5NjgzMTciLCJzY29wZXMiOltdfQ.OpI4us20qM9A09if3xlOhhoQGMz6Cw3I4fW4HR7g3p9fXkMULwBnptrqZthTlJ19v8vQyG72_wIoejJBd5b8FwonYNR_M4ZM9_gUBup1YZVTLWfzzTTGJAyRACRJ1aNuEl12ypbwlY9ae5hmB__pb_Vm0xyogePzXnhuca48aImaKj_1-pEqZ-chFgh3cj0QJhhHvfJ6889YMHftafZug6--LPXW_sm-TJ6FfkAA5ECiK3C-SoFYOxLtc9bwJkMalhVpwoZNPZo7BV4q7iC9q3IcNRiZPTVLWXlrLXIRKvHjQyv14o8U5D3uj-cfk-tMIwtnClbV6HqiN9hj-nM55TLVpOpBqtjAaVzhd1a12bxKh84JNKY-cUdo96IK09r_3VwIsx_hLGnaexY5gN17-BG0ZDsIXjjvi3ZH9UQdbpgSxjXfIiiVvsRC9-APS9ptsDhtW4hnbTqfTyn_XZJg6G-iyuWzXjz0gdi933oUTP47boGJZDHjCAX01NuXIcjG
+        "Authorization": "Bearer YOUR_API_KEY_HERE"
       },
       body: JSON.stringify({ license_key: key })
     })
@@ -161,6 +164,10 @@
         } else {
           alert("Invalid license key.");
         }
+      })
+      .catch(err => {
+        console.error("License validation error:", err);
+        alert("An error occurred validating your license.");
       });
   }
 
