@@ -139,11 +139,36 @@
     let uploadedFiles = [];
     let compressedBlobs = [];
 
-    // Load Pro status
+    // Load Pro status on page load
     const savedLicense = JSON.parse(localStorage.getItem("shrinkifly_license"));
     if (savedLicense && savedLicense.valid) {
-      activatePro(savedLicense.key, savedLicense.expiresAt);
+      if (savedLicense.expiresAt) {
+        const now = new Date();
+        const expDate = new Date(savedLicense.expiresAt);
+        if (expDate > now) {
+          activatePro(savedLicense.key, savedLicense.expiresAt);
+        } else {
+          // License expired
+          localStorage.removeItem("shrinkifly_license");
+          activateFree();
+        }
+      } else {
+        // No expiration means admin or unlimited
+        activatePro(savedLicense.key, savedLicense.expiresAt, savedLicense.key === "ADMIN-KEY-1234");
+      }
+    } else {
+      activateFree();
     }
+    
+    function activateFree() {
+      isPro = false;
+      modeText.innerText = "Free";
+      licenseStatus.textContent = "";
+      fileInput.multiple = false;
+      dropArea.style.display = 'none';
+      downloadAllBtn.style.display = 'none';
+    }
+
 
     unlockBtn.addEventListener("click", verifyLicense);
 
