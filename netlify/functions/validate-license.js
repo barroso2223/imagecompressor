@@ -1,4 +1,6 @@
-const fetch = require('node-fetch');
+// If your environment supports native fetch, you can omit node-fetch import.
+// Otherwise, install node-fetch and import as:
+// const fetch = require('node-fetch');
 
 exports.handler = async function(event, context) {
   try {
