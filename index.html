@@ -157,21 +157,12 @@
         return;
       }
 
-      fetch("/.netlify/functions/validate-license", {
+      fetch("/api/validate-license", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ license_key: key })
       })
-      .then(res => res.json())
-      .then(data => {
-        if (data.valid) {
-          const expiresAt = data.data.license_key.expires_at;
-          activatePro(key, expiresAt);
-          alert("Pro unlocked! Batch upload and drag-and-drop enabled.");
-        } else {
-          alert("Invalid license key.");
-        }
-      })
+
       .catch(err => {
         console.error("License validation error:", err);
         alert("An error occurred validating your license.");
@@ -185,7 +176,7 @@
       dropArea.style.display = 'block';
       enableDropArea();
       downloadAllBtn.style.display = 'inline-block';
-        
+
       if (!isAdmin && expiresAt) {
         const expDate = new Date(expiresAt);
         const now = new Date();
