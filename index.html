@@ -142,8 +142,25 @@
     // Load Pro status
     const savedLicense = JSON.parse(localStorage.getItem("shrinkifly_license"));
     if (savedLicense && savedLicense.valid) {
+  if (savedLicense.key === "ADMIN-KEY-1234") {
+    // Don’t auto-activate Admin mode on load — force Free mode instead
+    activateFree();
+  } else if (savedLicense.expiresAt) {
+    const now = new Date();
+    const expDate = new Date(savedLicense.expiresAt);
+    if (expDate > now) {
       activatePro(savedLicense.key, savedLicense.expiresAt);
+    } else {
+      localStorage.removeItem("shrinkifly_license");
+      activateFree();
     }
+  } else {
+    activatePro(savedLicense.key, savedLicense.expiresAt);
+  }
+} else {
+  activateFree();
+}
+
 
     unlockBtn.addEventListener("click", verifyLicense);
 
