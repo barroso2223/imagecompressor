@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     const response = await fetch("https://api.lemonsqueezy.com/v1/licenses/activate", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${process.env.LEMONSQUEEZY_API_KEY}`,  // Match Netlify's key name
+        "Authorization": `Bearer ${process.env.LEMON_SQUEEZY_API_KEY}`,
         "Content-Type": "application/json",
         "Accept": "application/json"
       },
@@ -21,14 +21,13 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
-    console.log("License activation response:", data);
 
     const isValid = data.activated === true && !data.error;
 
-    res.status(200).json({ valid: isValid, data });
+    return res.status(200).json({ valid: isValid, data });
 
   } catch (error) {
     console.error("License activation error:", error);
-    res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: "Server error validating license" });
   }
 }
