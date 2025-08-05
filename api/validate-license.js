@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   const { license_key } = req.body;
 
   try {
-    const response = await fetch("https://api.lemonsqueezy.com/v1/license-keys/validate", {
+    const response = await fetch("https://api.lemonsqueezy.com/v1/licenses/activate", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
