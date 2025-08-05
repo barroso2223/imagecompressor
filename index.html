@@ -139,13 +139,11 @@
     let uploadedFiles = [];
     let compressedBlobs = [];
 
-    // Load Pro status from localStorage
-    window.addEventListener("load", () => {
-      const savedLicense = JSON.parse(localStorage.getItem("shrinkifly_license"));
-      if (savedLicense && savedLicense.valid) {
-        activatePro(savedLicense.key, savedLicense.expiresAt);
-      }
-    });
+    // Load Pro status
+    const savedLicense = JSON.parse(localStorage.getItem("shrinkifly_license"));
+    if (savedLicense && savedLicense.valid) {
+      activatePro(savedLicense.key, savedLicense.expiresAt);
+    }
 
     unlockBtn.addEventListener("click", verifyLicense);
 
@@ -166,7 +164,6 @@
       })
       .then(res => res.json())
       .then(data => {
-        console.log("License validation response:", data);
         if (data.valid) {
           const expiresAt = data.data.license_key.expires_at;
           activatePro(key, expiresAt);
@@ -199,8 +196,8 @@
           licenseStatus.textContent = "License expired.";
           isPro = false;
         } else {
-          licenseStatus.textContent = daysLeft >= 1 ? 
-            `License valid for ${daysLeft} day(s)` : 
+          licenseStatus.textContent = daysLeft >= 1 ?
+            `License valid for ${daysLeft} day(s)` :
             `License valid for ${hoursLeft} hour(s)`;
         }
       }
@@ -209,19 +206,24 @@
     }
 
     function enableDropArea() {
-      dropArea.addEventListener('click', () => fileInput.click());
+      dropArea.addEventListener('click', () => {
+        fileInput.click();
+      });
 
       dropArea.addEventListener('dragover', (e) => {
         e.preventDefault();
         dropArea.classList.add('dragover');
       });
 
-      dropArea.addEventListener('dragleave', () => dropArea.classList.remove('dragover'));
+      dropArea.addEventListener('dragleave', () => {
+        dropArea.classList.remove('dragover');
+      });
 
       dropArea.addEventListener('drop', (e) => {
         e.preventDefault();
         dropArea.classList.remove('dragover');
-        handleFiles(e.dataTransfer.files);
+        const files = e.dataTransfer.files;
+        handleFiles(files);
       });
     }
 
@@ -229,10 +231,26 @@
       qualityValue.textContent = qualityRange.value;
     });
 
-    compressBtn.addEventListener('click', () => {
-      if (!uploadedFiles.length) return alert('Please upload at least one image.');
-      if (!isPro && uploadedFiles.length > 1) {
-        alert('Batch upload is Pro only. Please upload one image or unlock Pro.');
+    compressBtn.addEventListener('click', compressImages);
+
+    fileInput.addEventListener('change', e => handleFiles(e.target.files));
+
+    function handleFiles(files) {
+      let selectedFiles = Array.from(files);
+      if (!isPro && selectedFiles.length > 1) {
+        alert("Pro required for batch upload. Only first file used.");
+        selectedFiles = [selectedFiles[0]];
+      }
+      uploadedFiles = selectedFiles;
+
+      if (isPro) {
+        compressImages();
+      }
+    }
+
+    function compressImages() {
+      if (!uploadedFiles.length) {
+        alert('Please upload at least one image.');
         return;
       }
 
@@ -271,12 +289,12 @@
               link.innerText = 'Download';
               previewContainer.appendChild(link);
             }, format, quality);
-          }
+          };
           img.src = event.target.result;
         };
         reader.readAsDataURL(file);
       });
-    });
+    }
 
     downloadAllBtn.addEventListener('click', () => {
       const zip = new JSZip();
@@ -288,16 +306,8 @@
         link.click();
       });
     });
-
-    fileInput.addEventListener('change', e => handleFiles(e.target.files));
-    function handleFiles(files) {
-      uploadedFiles = Array.from(files);
-      if (!isPro && uploadedFiles.length > 1) {
-        alert("Pro required for batch upload. Only first file used.");
-        uploadedFiles = [uploadedFiles[0]];
-      }
-    }
   });
 </script>
+
 </body>
 </html>
