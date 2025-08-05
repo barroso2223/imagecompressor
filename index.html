@@ -179,33 +179,33 @@
     }
 
     function activatePro(key, expiresAt, isAdmin = false) {
-  isPro = true;
-  modeText.innerText = isAdmin ? "Admin" : "Pro";
-  fileInput.multiple = true;
-  dropArea.style.display = 'block';
-  enableDropArea();
-  downloadAllBtn.style.display = 'inline-block';
-
-  if (!isAdmin && expiresAt) {
-    const expDate = new Date(expiresAt);
-    const now = new Date();
-    const diffMs = expDate - now;
-    const hoursLeft = Math.floor(diffMs / (1000 * 60 * 60));
-    const daysLeft = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    if (diffMs <= 0) {
-      licenseStatus.textContent = "License expired.";
-      isPro = false;
-    } else {
-      licenseStatus.textContent = daysLeft >= 1 ? 
-        `License valid for ${daysLeft} day(s)` : 
-        `License valid for ${hoursLeft} hour(s)`;
+      isPro = true;
+      modeText.innerText = isAdmin ? "Admin" : "Pro";
+      fileInput.multiple = true;
+      dropArea.style.display = 'block';
+      enableDropArea();
+      downloadAllBtn.style.display = 'inline-block';
+        
+      if (!isAdmin && expiresAt) {
+        const expDate = new Date(expiresAt);
+        const now = new Date();
+        const diffMs = expDate - now;
+        const hoursLeft = Math.floor(diffMs / (1000 * 60 * 60));
+        const daysLeft = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        if (diffMs <= 0) {
+          licenseStatus.textContent = "License expired.";
+          isPro = false;
+        } else {
+          licenseStatus.textContent = daysLeft >= 1 ? 
+            `License valid for ${daysLeft} day(s)` : 
+            `License valid for ${hoursLeft} hour(s)`;
+        }
+      } else if (isAdmin) {
+        licenseStatus.textContent = "Admin access: Unlimited";
+      }
+    
+      localStorage.setItem("shrinkifly_license", JSON.stringify({ valid: true, key, expiresAt }));
     }
-  } else if (isAdmin) {
-    licenseStatus.textContent = "Admin access: Unlimited";
-  }
-
-  localStorage.setItem("shrinkifly_license", JSON.stringify({ valid: true, key, expiresAt }));
-}
 
 
     function enableDropArea() {
