@@ -94,6 +94,7 @@
 </a>
 
 <p id="status">Mode: <strong id="mode">Free</strong></p>
+<div id="license-status" style="margin-top: 10px; font-weight: bold; color: green;"></div>
 
 <div id="dropArea">Drag and drop your image(s) here or click to select</div>
 <input type="file" id="fileInput" accept="image/*" />
@@ -109,7 +110,6 @@
 <input type="range" id="qualityRange" min="0.1" max="1" step="0.05" value="0.8" />
 
 <button id="compressBtn">Compress & Convert</button>
-<div id="license-status" style="margin-top: 10px; font-weight: bold; color: green;"></div>
 <button id="downloadAllBtn">Download All as ZIP</button>
 
 <div id="previewContainer"></div>
@@ -179,31 +179,34 @@
     }
 
     function activatePro(key, expiresAt, isAdmin = false) {
-      isPro = true;
-      modeText.innerText = isAdmin ? "Admin" : "Pro";
-      fileInput.multiple = true;
-      dropArea.style.display = 'block';
-      enableDropArea();
-      downloadAllBtn.style.display = 'inline-block';
+  isPro = true;
+  modeText.innerText = isAdmin ? "Admin" : "Pro";
+  fileInput.multiple = true;
+  dropArea.style.display = 'block';
+  enableDropArea();
+  downloadAllBtn.style.display = 'inline-block';
 
-      if (!isAdmin && expiresAt) {
-        const expDate = new Date(expiresAt);
-        const now = new Date();
-        const diffMs = expDate - now;
-        const hoursLeft = Math.floor(diffMs / (1000 * 60 * 60));
-        const daysLeft = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-        if (diffMs <= 0) {
-          licenseStatus.textContent = "License expired.";
-          isPro = false;
-        } else {
-          licenseStatus.textContent = daysLeft >= 1 ?
-            `License valid for ${daysLeft} day(s)` :
-            `License valid for ${hoursLeft} hour(s)`;
-        }
-      }
-
-      localStorage.setItem("shrinkifly_license", JSON.stringify({ valid: true, key, expiresAt }));
+  if (!isAdmin && expiresAt) {
+    const expDate = new Date(expiresAt);
+    const now = new Date();
+    const diffMs = expDate - now;
+    const hoursLeft = Math.floor(diffMs / (1000 * 60 * 60));
+    const daysLeft = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    if (diffMs <= 0) {
+      licenseStatus.textContent = "License expired.";
+      isPro = false;
+    } else {
+      licenseStatus.textContent = daysLeft >= 1 ? 
+        `License valid for ${daysLeft} day(s)` : 
+        `License valid for ${hoursLeft} hour(s)`;
     }
+  } else if (isAdmin) {
+    licenseStatus.textContent = "Admin access: Unlimited";
+  }
+
+  localStorage.setItem("shrinkifly_license", JSON.stringify({ valid: true, key, expiresAt }));
+}
+
 
     function enableDropArea() {
       dropArea.addEventListener('click', () => {
