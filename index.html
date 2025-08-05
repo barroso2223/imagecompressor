@@ -142,24 +142,24 @@
     // Load Pro status
     const savedLicense = JSON.parse(localStorage.getItem("shrinkifly_license"));
     if (savedLicense && savedLicense.valid) {
-  if (savedLicense.key === "ADMIN-KEY-1234") {
-    // Don’t auto-activate Admin mode on load — force Free mode instead
-    activateFree();
-  } else if (savedLicense.expiresAt) {
-    const now = new Date();
-    const expDate = new Date(savedLicense.expiresAt);
-    if (expDate > now) {
-      activatePro(savedLicense.key, savedLicense.expiresAt);
-    } else {
-      localStorage.removeItem("shrinkifly_license");
+    if (savedLicense.key === "ADMIN-KEY-1234") {
+      // Don’t auto-activate Admin mode on load — force Free mode instead
       activateFree();
+    } else if (savedLicense.expiresAt) {
+      const now = new Date();
+      const expDate = new Date(savedLicense.expiresAt);
+      if (expDate > now) {
+        activatePro(savedLicense.key, savedLicense.expiresAt);
+      } else {
+        localStorage.removeItem("shrinkifly_license");
+        activateFree();
+      }
+    } else {
+      activatePro(savedLicense.key, savedLicense.expiresAt);
     }
   } else {
-    activatePro(savedLicense.key, savedLicense.expiresAt);
+    activateFree();
   }
-} else {
-  activateFree();
-}
 
 
     unlockBtn.addEventListener("click", verifyLicense);
@@ -229,6 +229,16 @@
       }
     
       localStorage.setItem("shrinkifly_license", JSON.stringify({ valid: true, key, expiresAt }));
+    }
+
+    function activateFree() {
+      isPro = false;
+      modeText.innerText = "Free";
+      fileInput.multiple = false;
+      dropArea.style.display = 'none';
+      downloadAllBtn.style.display = 'none';
+      licenseStatus.textContent = "";
+      localStorage.removeItem("shrinkifly_license");
     }
 
 
