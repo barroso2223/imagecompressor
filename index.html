@@ -84,7 +84,7 @@
 <body>
 
 <h1 style="font-size: 40px; color: rgb(79, 70, 229)">
-  <img src="/images/compressed_ShrinkiflyLogo(100 x 100 px).jpeg" alt="ShrinkiFly Logo"> ShrinkiFly
+  <img src="/images/compressed_ShrinkiflyLogo(100 x 100 px).jpeg" style="width: 30px; height: 30px;" alt="ShrinkiFly Logo"> ShrinkiFly
 </h1>
 <p>Fast & Easy Image Compression</p>
 <a href="https://barrosodigital.lemonsqueezy.com/buy/72c50ea5-394d-4b07-bdfc-20d32de9561f" target="_blank" rel="noopener noreferrer" 
@@ -120,181 +120,183 @@
 </div>
 
 <script>
-  const fileInput = document.getElementById('fileInput');
-  const dropArea = document.getElementById('dropArea');
-  const formatSelect = document.getElementById('formatSelect');
-  const qualityRange = document.getElementById('qualityRange');
-  const qualityValue = document.getElementById('qualityValue');
-  const compressBtn = document.getElementById('compressBtn');
-  const downloadAllBtn = document.getElementById('downloadAllBtn');
-  const previewContainer = document.getElementById('previewContainer');
-  const licenseKeyInput = document.getElementById("licenseKey");
-  const unlockBtn = document.getElementById("unlockBtn");
-  const modeText = document.getElementById("mode");
-  const licenseStatus = document.getElementById("license-status");
+  window.addEventListener('DOMContentLoaded', () => {
+    const fileInput = document.getElementById('fileInput');
+    const dropArea = document.getElementById('dropArea');
+    const formatSelect = document.getElementById('formatSelect');
+    const qualityRange = document.getElementById('qualityRange');
+    const qualityValue = document.getElementById('qualityValue');
+    const compressBtn = document.getElementById('compressBtn');
+    const downloadAllBtn = document.getElementById('downloadAllBtn');
+    const previewContainer = document.getElementById('previewContainer');
+    const licenseKeyInput = document.getElementById("licenseKey");
+    const unlockBtn = document.getElementById("unlockBtn");
+    const modeText = document.getElementById("mode");
+    const licenseStatus = document.getElementById("license-status");
 
-  let isPro = false;
-  let uploadedFiles = [];
-  let compressedBlobs = [];
+    let isPro = false;
+    let uploadedFiles = [];
+    let compressedBlobs = [];
 
-  // Load Pro status from localStorage
-  window.addEventListener("load", () => {
-    const savedLicense = JSON.parse(localStorage.getItem("shrinkifly_license"));
-    if (savedLicense && savedLicense.valid) {
-      activatePro(savedLicense.key, savedLicense.expiresAt);
-    }
-  });
-
-  unlockBtn.addEventListener("click", verifyLicense);
-
-  function verifyLicense() {
-    const key = licenseKeyInput.value.trim();
-    if (!key) return alert("Enter a license key.");
-
-    if (key === "ADMIN-KEY-1234") {
-      activatePro(key, null, true);
-      alert("Admin access granted.");
-      return;
-    }
-
-    fetch("/.netlify/functions/validate-license", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ license_key: key })
-    })
-    .then(res => res.json())
-    .then(data => {
-      console.log("License validation response:", data);
-      if (data.valid) {
-        const expiresAt = data.data.license_key.expires_at;
-        activatePro(key, expiresAt);
-        alert("Pro unlocked! Batch upload and drag-and-drop enabled.");
-      } else {
-        alert("Invalid license key.");
+    // Load Pro status from localStorage
+    window.addEventListener("load", () => {
+      const savedLicense = JSON.parse(localStorage.getItem("shrinkifly_license"));
+      if (savedLicense && savedLicense.valid) {
+        activatePro(savedLicense.key, savedLicense.expiresAt);
       }
-    })
-    .catch(err => {
-      console.error("License validation error:", err);
-      alert("An error occurred validating your license.");
     });
-  }
 
-  function activatePro(key, expiresAt, isAdmin = false) {
-    isPro = true;
-    modeText.innerText = isAdmin ? "Admin" : "Pro";
-    fileInput.multiple = true;
-    dropArea.style.display = 'block';
-    enableDropArea();
-    downloadAllBtn.style.display = 'inline-block';
+    unlockBtn.addEventListener("click", verifyLicense);
 
-    if (!isAdmin && expiresAt) {
-      const expDate = new Date(expiresAt);
-      const now = new Date();
-      const diffMs = expDate - now;
-      const hoursLeft = Math.floor(diffMs / (1000 * 60 * 60));
-      const daysLeft = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-      if (diffMs <= 0) {
-        licenseStatus.textContent = "License expired.";
-        isPro = false;
-      } else {
-        licenseStatus.textContent = daysLeft >= 1 ? 
-          `License valid for ${daysLeft} day(s)` : 
-          `License valid for ${hoursLeft} hour(s)`;
+    function verifyLicense() {
+      const key = licenseKeyInput.value.trim();
+      if (!key) return alert("Enter a license key.");
+
+      if (key === "ADMIN-KEY-1234") {
+        activatePro(key, null, true);
+        alert("Admin access granted.");
+        return;
       }
-    }
 
-    localStorage.setItem("shrinkifly_license", JSON.stringify({ valid: true, key, expiresAt }));
-  }
-
-  function enableDropArea() {
-    dropArea.addEventListener('click', () => fileInput.click());
-
-    dropArea.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      dropArea.classList.add('dragover');
-    });
-
-    dropArea.addEventListener('dragleave', () => dropArea.classList.remove('dragover'));
-
-    dropArea.addEventListener('drop', (e) => {
-      e.preventDefault();
-      dropArea.classList.remove('dragover');
-      handleFiles(e.dataTransfer.files);
-    });
-  }
-
-  qualityRange.addEventListener('input', () => {
-    qualityValue.textContent = qualityRange.value;
-  });
-
-  compressBtn.addEventListener('click', () => {
-    if (!uploadedFiles.length) return alert('Please upload at least one image.');
-    if (!isPro && uploadedFiles.length > 1) {
-      alert('Batch upload is Pro only. Please upload one image or unlock Pro.');
-      return;
-    }
-
-    previewContainer.innerHTML = '';
-    compressedBlobs = [];
-
-    uploadedFiles.forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        const img = new Image();
-        img.onload = function() {
-          const canvas = document.createElement('canvas');
-          const scale = Math.min(1, 1024 / img.width);
-          canvas.width = img.width * scale;
-          canvas.height = img.height * scale;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          const format = formatSelect.value;
-          const quality = format === 'image/png' ? undefined : parseFloat(qualityRange.value);
-          canvas.toBlob(blob => {
-            compressedBlobs.push({ blob, name: `compressed_${file.name.split('.')[0]}.${format.split('/')[1]}` });
-            const url = URL.createObjectURL(blob);
-            const previewImg = document.createElement('img');
-            previewImg.src = url;
-            previewContainer.appendChild(previewImg);
-
-            const info = document.createElement('div');
-            info.className = 'size-info';
-            info.innerText = `Original: ${(file.size / 1024).toFixed(2)} KB | Compressed: ${(blob.size / 1024).toFixed(2)} KB`;
-            previewContainer.appendChild(info);
-
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `compressed_${file.name.split('.')[0]}.${format.split('/')[1]}`;
-            link.className = 'download-link';
-            link.innerText = 'Download';
-            previewContainer.appendChild(link);
-          }, format, quality);
+      fetch("/.netlify/functions/validate-license", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ license_key: key })
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log("License validation response:", data);
+        if (data.valid) {
+          const expiresAt = data.data.license_key.expires_at;
+          activatePro(key, expiresAt);
+          alert("Pro unlocked! Batch upload and drag-and-drop enabled.");
+        } else {
+          alert("Invalid license key.");
         }
-        img.src = event.target.result;
-      };
-      reader.readAsDataURL(file);
-    });
-  });
-
-  downloadAllBtn.addEventListener('click', () => {
-    const zip = new JSZip();
-    compressedBlobs.forEach(({ blob, name }) => zip.file(name, blob));
-    zip.generateAsync({ type: "blob" }).then(content => {
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(content);
-      link.download = "compressed_images.zip";
-      link.click();
-    });
-  });
-
-  fileInput.addEventListener('change', e => handleFiles(e.target.files));
-  function handleFiles(files) {
-    uploadedFiles = Array.from(files);
-    if (!isPro && uploadedFiles.length > 1) {
-      alert("Pro required for batch upload. Only first file used.");
-      uploadedFiles = [uploadedFiles[0]];
+      })
+      .catch(err => {
+        console.error("License validation error:", err);
+        alert("An error occurred validating your license.");
+      });
     }
-  }
+
+    function activatePro(key, expiresAt, isAdmin = false) {
+      isPro = true;
+      modeText.innerText = isAdmin ? "Admin" : "Pro";
+      fileInput.multiple = true;
+      dropArea.style.display = 'block';
+      enableDropArea();
+      downloadAllBtn.style.display = 'inline-block';
+
+      if (!isAdmin && expiresAt) {
+        const expDate = new Date(expiresAt);
+        const now = new Date();
+        const diffMs = expDate - now;
+        const hoursLeft = Math.floor(diffMs / (1000 * 60 * 60));
+        const daysLeft = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        if (diffMs <= 0) {
+          licenseStatus.textContent = "License expired.";
+          isPro = false;
+        } else {
+          licenseStatus.textContent = daysLeft >= 1 ? 
+            `License valid for ${daysLeft} day(s)` : 
+            `License valid for ${hoursLeft} hour(s)`;
+        }
+      }
+
+      localStorage.setItem("shrinkifly_license", JSON.stringify({ valid: true, key, expiresAt }));
+    }
+
+    function enableDropArea() {
+      dropArea.addEventListener('click', () => fileInput.click());
+
+      dropArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropArea.classList.add('dragover');
+      });
+
+      dropArea.addEventListener('dragleave', () => dropArea.classList.remove('dragover'));
+
+      dropArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropArea.classList.remove('dragover');
+        handleFiles(e.dataTransfer.files);
+      });
+    }
+
+    qualityRange.addEventListener('input', () => {
+      qualityValue.textContent = qualityRange.value;
+    });
+
+    compressBtn.addEventListener('click', () => {
+      if (!uploadedFiles.length) return alert('Please upload at least one image.');
+      if (!isPro && uploadedFiles.length > 1) {
+        alert('Batch upload is Pro only. Please upload one image or unlock Pro.');
+        return;
+      }
+
+      previewContainer.innerHTML = '';
+      compressedBlobs = [];
+
+      uploadedFiles.forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const img = new Image();
+          img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const scale = Math.min(1, 1024 / img.width);
+            canvas.width = img.width * scale;
+            canvas.height = img.height * scale;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            const format = formatSelect.value;
+            const quality = format === 'image/png' ? undefined : parseFloat(qualityRange.value);
+            canvas.toBlob(blob => {
+              compressedBlobs.push({ blob, name: `compressed_${file.name.split('.')[0]}.${format.split('/')[1]}` });
+              const url = URL.createObjectURL(blob);
+              const previewImg = document.createElement('img');
+              previewImg.src = url;
+              previewContainer.appendChild(previewImg);
+
+              const info = document.createElement('div');
+              info.className = 'size-info';
+              info.innerText = `Original: ${(file.size / 1024).toFixed(2)} KB | Compressed: ${(blob.size / 1024).toFixed(2)} KB`;
+              previewContainer.appendChild(info);
+
+              const link = document.createElement('a');
+              link.href = url;
+              link.download = `compressed_${file.name.split('.')[0]}.${format.split('/')[1]}`;
+              link.className = 'download-link';
+              link.innerText = 'Download';
+              previewContainer.appendChild(link);
+            }, format, quality);
+          }
+          img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    downloadAllBtn.addEventListener('click', () => {
+      const zip = new JSZip();
+      compressedBlobs.forEach(({ blob, name }) => zip.file(name, blob));
+      zip.generateAsync({ type: "blob" }).then(content => {
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(content);
+        link.download = "compressed_images.zip";
+        link.click();
+      });
+    });
+
+    fileInput.addEventListener('change', e => handleFiles(e.target.files));
+    function handleFiles(files) {
+      uploadedFiles = Array.from(files);
+      if (!isPro && uploadedFiles.length > 1) {
+        alert("Pro required for batch upload. Only first file used.");
+        uploadedFiles = [uploadedFiles[0]];
+      }
+    }
+  });
 </script>
 </body>
 </html>
