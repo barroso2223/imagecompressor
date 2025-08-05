@@ -1,6 +1,6 @@
 [build]
-  publish = "."       # or your actual publish directory
-  command = "npm run build"  # if you have a build step
+  publish = "."  # This means serve index.html from the root folder
+  # No build command needed
 
 [functions]
   directory = "netlify/functions"
