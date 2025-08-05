@@ -139,28 +139,25 @@
     let uploadedFiles = [];
     let compressedBlobs = [];
 
-    // Load Pro status
     const savedLicense = JSON.parse(localStorage.getItem("shrinkifly_license"));
     if (savedLicense && savedLicense.valid) {
-    if (savedLicense.key === "ADMIN-KEY-1234") {
-      // Don’t auto-activate Admin mode on load — force Free mode instead
-      activateFree();
-    } else if (savedLicense.expiresAt) {
-      const now = new Date();
-      const expDate = new Date(savedLicense.expiresAt);
-      if (expDate > now) {
-        activatePro(savedLicense.key, savedLicense.expiresAt);
-      } else {
-        localStorage.removeItem("shrinkifly_license");
+      if (savedLicense.key === "ADMIN-KEY-1234") {
         activateFree();
+      } else if (savedLicense.expiresAt) {
+        const now = new Date();
+        const expDate = new Date(savedLicense.expiresAt);
+        if (expDate > now) {
+          activatePro(savedLicense.key, savedLicense.expiresAt);
+        } else {
+          localStorage.removeItem("shrinkifly_license");
+          activateFree();
+        }
+      } else {
+        activatePro(savedLicense.key, savedLicense.expiresAt);
       }
     } else {
-      activatePro(savedLicense.key, savedLicense.expiresAt);
+      activateFree();
     }
-  } else {
-    activateFree();
-  }
-
 
     unlockBtn.addEventListener("click", verifyLicense);
 
@@ -175,31 +172,27 @@
       }
 
       fetch("/api/validate-license", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ license_key: key })
-})
-.then(res => {
-  if (!res.ok) throw new Error('Network response was not ok');
-  return res.json();
-})
-.then(data => {
-  // Assuming LemonSqueezy API response structure:
-  // Check if license key is valid, not expired etc.
-  if (data.data && data.data.attributes && data.data.attributes.status === 'active') {
-    // Example: extract expiration date if available
-    const expiresAt = data.data.attributes.expires_at || null;
-    activatePro(key, expiresAt);
-    alert("License validated and Pro mode activated!");
-  } else {
-    alert("Invalid or expired license key.");
-  }
-})
-.catch(err => {
-  console.error("License validation error:", err);
-  alert("An error occurred validating your license.");
-});
-
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ license_key: key })
+      })
+      .then(res => {
+        if (!res.ok) throw new Error('Network response was not ok');
+        return res.json();
+      })
+      .then(data => {
+        if (data.valid) {
+          const expiresAt = data.expiresAt || null;
+          activatePro(key, expiresAt);
+          alert("License validated and Pro mode activated!");
+        } else {
+          alert("Invalid or expired license key.");
+        }
+      })
+      .catch(err => {
+        console.error("License validation error:", err);
+        alert("An error occurred validating your license.");
+      });
     }
 
     function activatePro(key, expiresAt, isAdmin = false) {
@@ -227,7 +220,7 @@
       } else if (isAdmin) {
         licenseStatus.textContent = "Admin access: Unlimited";
       }
-    
+
       localStorage.setItem("shrinkifly_license", JSON.stringify({ valid: true, key, expiresAt }));
     }
 
@@ -241,26 +234,17 @@
       localStorage.removeItem("shrinkifly_license");
     }
 
-
     function enableDropArea() {
-      dropArea.addEventListener('click', () => {
-        fileInput.click();
-      });
-
-      dropArea.addEventListener('dragover', (e) => {
+      dropArea.addEventListener('click', () => fileInput.click());
+      dropArea.addEventListener('dragover', e => {
         e.preventDefault();
         dropArea.classList.add('dragover');
       });
-
-      dropArea.addEventListener('dragleave', () => {
-        dropArea.classList.remove('dragover');
-      });
-
-      dropArea.addEventListener('drop', (e) => {
+      dropArea.addEventListener('dragleave', () => dropArea.classList.remove('dragover'));
+      dropArea.addEventListener('drop', e => {
         e.preventDefault();
         dropArea.classList.remove('dragover');
-        const files = e.dataTransfer.files;
-        handleFiles(files);
+        handleFiles(e.dataTransfer.files);
       });
     }
 
@@ -269,7 +253,6 @@
     });
 
     compressBtn.addEventListener('click', compressImages);
-
     fileInput.addEventListener('change', e => handleFiles(e.target.files));
 
     function handleFiles(files) {
