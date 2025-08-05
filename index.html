@@ -158,15 +158,31 @@
       }
 
       fetch("/api/validate-license", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ license_key: key })
-      })
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ license_key: key })
+})
+.then(res => {
+  if (!res.ok) throw new Error('Network response was not ok');
+  return res.json();
+})
+.then(data => {
+  // Assuming LemonSqueezy API response structure:
+  // Check if license key is valid, not expired etc.
+  if (data.data && data.data.attributes && data.data.attributes.status === 'active') {
+    // Example: extract expiration date if available
+    const expiresAt = data.data.attributes.expires_at || null;
+    activatePro(key, expiresAt);
+    alert("License validated and Pro mode activated!");
+  } else {
+    alert("Invalid or expired license key.");
+  }
+})
+.catch(err => {
+  console.error("License validation error:", err);
+  alert("An error occurred validating your license.");
+});
 
-      .catch(err => {
-        console.error("License validation error:", err);
-        alert("An error occurred validating your license.");
-      });
     }
 
     function activatePro(key, expiresAt, isAdmin = false) {
