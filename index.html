@@ -331,6 +331,14 @@ async function compressImages() {
           
       const previewImg = document.createElement('img');
       previewImg.src = url;
+
+      const fileNameDiv = document.createElement('div');
+      fileNameDiv.className = 'filename';
+      fileNameDiv.innerText = file.name;
+      fileNameDiv.style.marginTop = '0.5rem';
+      fileNameDiv.style.fontSize = '0.9rem';
+      fileNameDiv.style.color = '#374151';  // Tailwind gray-700
+      fileNameDiv.style.wordBreak = 'break-all';  // Handle long names
           
       const info = document.createElement('div');
       info.className = 'size-info';
