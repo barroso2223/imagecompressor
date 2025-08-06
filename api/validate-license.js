@@ -6,27 +6,29 @@ export default async function handler(req, res) {
   const { license_key } = req.body;
 
   try {
-    const response = await fetch("https://api.lemonsqueezy.com/v1/licenses/validate", {
+    const response = await fetch("https://api.lemonsqueezy.com/v1/licenses/activate", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${process.env.LEMON_SQUEEZY_API_KEY}`,
         "Content-Type": "application/json",
         "Accept": "application/json"
       },
-      body: JSON.stringify({ license_key })
+      body: JSON.stringify({
+        license_key,
+        instance_name: "ShrinkiFly",
+        metadata: { source: "image-compressor-app" }
+      })
     });
 
     const data = await response.json();
-
     console.log("🍋 Validation response:", data);
 
-    const isValid = data.valid === true && data.data?.attributes?.status === 'active';
-    const expiresAt = data.data?.attributes?.expires_at || null;
+    const isValid = data.license_key?.status === 'active' && !data.error;
 
-    return res.status(200).json({ valid: isValid, expiresAt, data });
+    return res.status(200).json({ valid: isValid, data });
 
   } catch (error) {
-    console.error("License validation error:", error);
+    console.error("License activation error:", error);
     return res.status(500).json({ error: "Server error validating license" });
   }
 }
