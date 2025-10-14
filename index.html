@@ -1,190 +1,353 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title style="font-family: poppins;">ShrinkiFly - Image Compressor</title>
-	<meta charset="utf-8" />
-	<meta name="Barroso Digital Design" content="Website design and development brand">
-	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <title style="font-family: poppins;">ShrinkiFly - Image Compressor</title>
+    <meta charset="utf-8" />
+    <meta name="Barroso Digital Design" content="Website design and development brand">
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 
-  <meta name="google-adsense-account" content="ca-pub-4432411945903392">
+    <meta name="google-adsense-account" content="ca-pub-4432411945903392">
 
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4432411945903392"
-     crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4432411945903392"
+         crossorigin="anonymous"></script>
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EKYPTC7952"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-  
-    gtag('config', 'G-EKYPTC7952');
-  </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EKYPTC7952"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-EKYPTC7952');
+    </script>
 
-	
-	<!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Alumni+Sans:ital,wght@0,100..900;1,100..900&family=Poppins:wght@100;200;300;400;500;600&family=Rye&family=Shantell+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
-	<!-- Font Awesome -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-	<link rel="stylesheet" href="normalize.css">
-	<!--Bootstrap-->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-	<!-- AOS Library -->
-	<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
-	<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 600px;
-      margin: 2rem auto;
-      background: #f9fafb;
-      color: #111827;
-      text-align: center;
-      padding: 1rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      border-radius: 12px;
-    }
-    input, select {
-      margin: 1rem 0;
-      padding: 0.5rem;
-      width: 100%;
-      max-width: 300px;
-      font-size: 1rem;
-    }
-    label {
-      display: block;
-      margin-top: 1rem;
-    }
-    button {
-      margin-top: 1.5rem;
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      background-color: #4F46E5;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    button:disabled {
-      background: #999;
-      cursor: not-allowed;
-    }
-    #previewContainer img {
-      margin-top: 1rem;
-      max-width: 100%;
-      max-height: 300px;
-      border-radius: 8px;
-      box-shadow: 0 0 6px rgba(0,0,0,0.15);
-    }
-    .download-link {
-      display: inline-block;
-      margin-top: 1rem;
-      font-weight: bold;
-      color: #14B8A6;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-    .size-info {
-      margin-top: 0.5rem;
-      font-size: 0.9rem;
-      color: #6B7280;
-    }
-    #dropArea {
-      display: none;
-      border: 2px dashed #4F46E5;
-      padding: 2rem;
-      margin: 1rem 0;
-      border-radius: 10px;
-      cursor: pointer;
-      background: #fff;
-    }
-    #dropArea.dragover {
-      background-color: #e0e7ff;
-    }
-    #downloadAllBtn {
-      display: none;
-      margin-top: 1rem;
-      background-color: #10B981;
-    }
-    .preview-item {
-      margin-top: 1rem;
-      padding: 1rem;
-      background: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-      text-align: center;
-    }
-    .filename {
-      margin-top: 0.5rem;
-      font-size: 0.9rem;
-      color: #374151;
-      word-break: break-word;
-    }
-    .shrinkiFlyLogo {
-      font-family: "Poppins", sans-serif;
-      font-weight: 600;
-      font-style: italic;
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alumni+Sans:ital,wght@0,100..900;1,100..900&family=Poppins:wght@100;200;300;400;500;600&family=Rye&family=Shantell+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="normalize.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+    <style>
+        /* --- LAYOUT STYLES --- */
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9fafb;
+            color: #111827;
+            margin: 0;
+            padding: 0;
+        }
+        .page-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            padding: 0 1rem;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        .main-content {
+            max-width: 600px;
+            width: 100%;
+            margin: 2rem 0;
+            text-align: center;
+            padding: 1rem;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            background: #ffffff;
+            flex-shrink: 0;
+        }
+        .ad-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            margin-top: 2rem;
+            min-width: 160px;
+        }
+        .ad-sidebar {
+            display: none;
+        }
+        .ad-mobile {
+            display: block;
+            max-width: 600px;
+            margin: 1.5rem auto;
+            padding: 0 1rem;
+        }
+        @media (min-width: 992px) {
+            .ad-sidebar {
+                display: block;
+                flex: 1;
+            }
+            .ad-mobile {
+                display: none;
+            }
+        }
+        
+        /* --- NEW CONTENT SECTION STYLES --- */
+        .additional-content {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1rem 2rem;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: left;
+        }
+        .additional-content h2 {
+            font-family: 'Poppins', sans-serif;
+            color: #111827;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .additional-content h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #374151;
+            margin-top: 1.5rem;
+        }
+        .additional-content p {
+            line-height: 1.6;
+            color: #4b5563;
+        }
 
-    }
-
-
-  </style>
+        /* --- ORIGINAL STYLES --- */
+        input, select {
+            margin: 1rem 0;
+            padding: 0.5rem;
+            width: 100%;
+            max-width: 300px;
+            font-size: 1rem;
+        }
+        label {
+            display: block;
+            margin-top: 1rem;
+        }
+        button {
+            margin-top: 1.5rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            background-color: #4F46E5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
+        #previewContainer img {
+            margin-top: 1rem;
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            box-shadow: 0 0 6px rgba(0,0,0,0.15);
+        }
+        .download-link {
+            display: inline-block;
+            margin-top: 1rem;
+            font-weight: bold;
+            color: #14B8A6;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .size-info {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #6B7280;
+        }
+        #dropArea {
+            display: none;
+            border: 2px dashed #4F46E5;
+            padding: 2rem;
+            margin: 1rem 0;
+            border-radius: 10px;
+            cursor: pointer;
+            background: #fff;
+        }
+        #dropArea.dragover {
+            background-color: #e0e7ff;
+        }
+        #downloadAllBtn {
+            display: none;
+            margin-top: 1rem;
+            background-color: #10B981;
+        }
+        .preview-item {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .filename {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #374151;
+            word-break: break-word;
+        }
+        .shrinkiFlyLogo {
+            font-family: "Poppins", sans-serif;
+            font-weight: 600;
+            font-style: italic;
+        }
+    </style>
 </head>
 <body>
 
-<h1 class="shrinkiFlyLogo" style="font-size: 40px; color: rgb(79, 70, 229)">
-  <img src="/images/shrinkiflyLogo.svg" style="width: 40px; height: 40px;" alt="ShrinkiFly Logo"> ShrinkiFly
-</h1>
-<p>Fast & Easy Image Compression</p>
-<p style="padding: .5em 3em;">Get faster batch uploads and downloads including drag and drop feature on the Pro, starting as low as $3/month</p>
-<a class="mb-3" href="https://barrosodigital.lemonsqueezy.com/buy/72c50ea5-394d-4b07-bdfc-20d32de9561f" target="_blank" rel="noopener noreferrer" 
-   style="display:inline-block;margin-top:.25rem;padding:0.5rem 1.5rem;background:#037c03;color:white;border-radius:8px;text-decoration:none;">
-   Upgrade To Pro
-</a>
+<div class="ad-container ad-mobile">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4432411945903392"
+         crossorigin="anonymous"></script>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-4432411945903392"
+         data-ad-slot="6173538676"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
 
-<p id="status">Mode: <strong id="mode">Free</strong></p>
-<div id="license-status" style="margin-top: 10px; font-weight: bold; color: green;"></div>
+<div class="page-wrapper">
+    <aside class="ad-container ad-sidebar">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4432411945903392"
+             crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-4432411945903392"
+             data-ad-slot="3269572530"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </aside>
 
-<div id="dropArea">Drag and drop your image(s) here or click to select</div>
-<input type="file" id="fileInput" accept="image/*" />
+    <main class="main-content">
+        <h1 class="shrinkiFlyLogo" style="font-size: 40px; color: rgb(79, 70, 229)">
+            <img src="/images/shrinkiflyLogo.svg" style="width: 40px; height: 40px;" alt="ShrinkiFly Logo"> ShrinkiFly
+        </h1>
+        <p>Fast & Easy Image Compression</p>
+        <p style="padding: .5em 3em;">Get faster batch uploads and downloads including drag and drop feature on the Pro, starting as low as $3/month</p>
+        <a class="mb-3" href="https://barrosodigital.lemonsqueezy.com/buy/72c50ea5-394d-4b07-bdfc-20d32de9561f" target="_blank" rel="noopener noreferrer" 
+           style="display:inline-block;margin-top:.25rem;padding:0.5rem 1.5rem;background:#037c03;color:white;border-radius:8px;text-decoration:none;">
+           Upgrade To Pro
+        </a>
 
-<label for="formatSelect">Select output format:</label>
-<select id="formatSelect">
-  <option value="image/jpeg">JPEG</option>
-  <option value="image/png">PNG</option>
-  <option value="image/webp">WebP</option>
-</select>
+        <p id="status">Mode: <strong id="mode">Free</strong></p>
+        <div id="license-status" style="margin-top: 10px; font-weight: bold; color: green;"></div>
 
-<label for="qualityRange">Compression quality (JPEG/WebP): <span id="qualityValue">0.8</span></label>
-<input type="range" id="qualityRange" min="0.1" max="1" step="0.05" value="0.8" />
+        <div id="dropArea">Drag and drop your image(s) here or click to select</div>
+        <input type="file" id="fileInput" accept="image/*" />
 
-<button id="compressBtn">Compress & Convert</button>
-<button id="downloadAllBtn">Download All as ZIP</button>
+        <label for="formatSelect">Select output format:</label>
+        <select id="formatSelect">
+            <option value="image/jpeg">JPEG</option>
+            <option value="image/png">PNG</option>
+            <option value="image/webp">WebP</option>
+        </select>
 
-<div id="previewContainer"></div>
+        <label for="qualityRange">Compression quality (JPEG/WebP): <span id="qualityValue">0.8</span></label>
+        <input type="range" id="qualityRange" min="0.1" max="1" step="0.05" value="0.8" />
 
-<div style="margin-top:2rem">
-  <label for="licenseKey">Have a Pro license?</label><br>
-  <input type="text" id="licenseKey" placeholder="Enter your license key" style="width:100%;padding:0.5rem;" />
-  <button id="unlockBtn" style="margin-top:1rem;">Unlock Pro</button>
+        <button id="compressBtn">Compress & Convert</button>
+        <button id="downloadAllBtn">Download All as ZIP</button>
+
+        <div id="previewContainer"></div>
+
+        <div style="margin-top:2rem">
+            <label for="licenseKey">Have a Pro license?</label><br>
+            <input type="text" id="licenseKey" placeholder="Enter your license key" style="width:100%;padding:0.5rem;" />
+            <button id="unlockBtn" style="margin-top:1rem;">Unlock Pro</button>
+        </div>
+    </main>
+
+    <aside class="ad-container ad-sidebar">
+         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4432411945903392"
+             crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-4432411945903392"
+             data-ad-slot="3269572530"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </aside>
+</div>
+
+<div class="additional-content">
+    <section id="about">
+        <h2>About ShrinkiFly</h2>
+        <p>
+            ShrinkiFly is a powerful and easy-to-use online tool designed to compress your images without compromising quality. Whether you're a web developer looking to speed up your website, a blogger wanting to optimize post images, or just someone trying to send smaller files via email, ShrinkiFly has you covered.
+        </p>
+        <p>
+            Our tool processes everything right in your browser, meaning your images are never uploaded to a server. This ensures your privacy and provides near-instant compression. We support popular formats like JPEG, PNG, and the modern WebP format, giving you full control over the output.
+        </p>
+    </section>
+
+    <section id="faq" style="margin-top: 2.5rem;">
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        
+        <div>
+            <h3>Is ShrinkiFly free to use?</h3>
+            <p>
+                Yes! The core functionality of ShrinkiFly is completely free for single-image compression. For users who need to process multiple images at once, we offer a <strong>Pro version</strong> that unlocks batch processing, drag-and-drop uploads, and a "Download All as ZIP" feature for maximum convenience.
+            </p>
+        </div>
+        
+        <div>
+            <h3>Are my images secure?</h3>
+            <p>
+                Absolutely. Your privacy is our top priority. All image compression happens directly on your computer within your web browser. Your files are never uploaded to our servers or seen by anyone else.
+            </p>
+        </div>
+
+        <div>
+            <h3>What image formats do you support?</h3>
+            <p>
+                You can upload most standard image formats. For output, you can choose between <strong>JPEG</strong>, <strong>PNG</strong>, and <strong>WebP</strong>. For JPEG and WebP formats, you can also adjust the compression quality to find the perfect balance between file size and image clarity.
+            </p>
+        </div>
+        
+        <div>
+            <h3>How do I upgrade to Pro?</h3>
+            <p>
+                You can upgrade to Pro by purchasing a license key. Once you have your key, simply enter it into the "Have a Pro license?" field on the tool and click "Unlock Pro." Your browser will remember your license for future visits.
+            </p>
+        </div>
+    </section>
+</div>
+
+<div class="ad-container ad-mobile">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4432411945903392"
+         crossorigin="anonymous"></script>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-4432411945903392"
+         data-ad-slot="6173538676"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
 </div>
 
 <script defer>
+  // The entire JavaScript from the previous response goes here.
+  // It is unchanged.
   window.addEventListener('DOMContentLoaded', () => {
-    // Prevent default drag-and-drop behavior on window to stop image opening
-    window.addEventListener("dragover", function(e) {
-      e.preventDefault();
-    }, false);
-
-    window.addEventListener("drop", function(e) {
-      e.preventDefault();
-    }, false);
-
+    window.addEventListener("dragover", function(e) { e.preventDefault(); }, false);
+    window.addEventListener("drop", function(e) { e.preventDefault(); }, false);
     const fileInput = document.getElementById('fileInput');
     const dropArea = document.getElementById('dropArea');
     const formatSelect = document.getElementById('formatSelect');
@@ -197,12 +360,10 @@
     const unlockBtn = document.getElementById("unlockBtn");
     const modeText = document.getElementById("mode");
     const licenseStatus = document.getElementById("license-status");
-
     let isPro = false;
     let uploadedFiles = [];
     let compressedBlobs = [];
-    let dropSource = false;  // To prevent duplicate handling
-
+    let dropSource = false;
     const savedLicense = JSON.parse(localStorage.getItem("shrinkifly_license"));
     if (savedLicense && savedLicense.valid) {
       if (savedLicense.key === "ADMIN-KEY-1234") {
@@ -222,22 +383,17 @@
     } else {
       activateFree();
     }
-
     unlockBtn.addEventListener("click", verifyLicense);
-
     function verifyLicense() {
       const key = licenseKeyInput.value.trim();
       if (!key) return alert("Enter a license key.");
-
       if (key === "ADMIN-KEY-1234") {
         activatePro(key, null, true);
         alert("Admin access granted.");
-
         licenseKeyInput.value = "";
         licenseKeyInput.placeholder = "Admin Access";
         return;
       }
-
       fetch("/api/validate-license", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -248,25 +404,22 @@
         return res.json();
       })
       .then(data => {
-    const license = data.data?.license_key;
-    if (data.valid && license?.status === 'active') {
-      const expiresAt = license.expires_at || null;
-      activatePro(key, expiresAt);
-      alert("License validated and Pro mode activated!");
-
-      licenseKeyInput.value = "";
-      licenseKeyInput.placeholder = "License validated";
-
-    } else {
-      alert("Invalid or expired license key.");
-    }
-  })
+        const license = data.data?.license_key;
+        if (data.valid && license?.status === 'active') {
+          const expiresAt = license.expires_at || null;
+          activatePro(key, expiresAt);
+          alert("License validated and Pro mode activated!");
+          licenseKeyInput.value = "";
+          licenseKeyInput.placeholder = "License validated";
+        } else {
+          alert("Invalid or expired license key.");
+        }
+      })
       .catch(err => {
         console.error("License validation error:", err);
         alert("An error occurred validating your license.");
       });
     }
-
     function activatePro(key, expiresAt, isAdmin = false) {
       isPro = true;
       modeText.innerText = isAdmin ? "Admin" : "Pro";
@@ -274,31 +427,25 @@
       dropArea.style.display = 'block';
       enableDropArea();
       downloadAllBtn.style.display = 'inline-block';
-
-       if (isAdmin) {
-    licenseStatus.textContent = "Admin access: Unlimited";
-  } else if (expiresAt) {
-    const expDate = new Date(expiresAt);
-    const now = new Date();
-    const diffMs = expDate - now;
-    const hoursLeft = Math.floor(diffMs / (1000 * 60 * 60));
-    const daysLeft = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    if (diffMs <= 0) {
-      licenseStatus.textContent = "License expired.";
-      isPro = false;
-    } else {
-      licenseStatus.textContent = daysLeft >= 1 ? 
-        `License valid for ${daysLeft} day(s)` : 
-        `License valid for ${hoursLeft} hour(s)`;
+      if (isAdmin) {
+        licenseStatus.textContent = "Admin access: Unlimited";
+      } else if (expiresAt) {
+        const expDate = new Date(expiresAt);
+        const now = new Date();
+        const diffMs = expDate - now;
+        const hoursLeft = Math.floor(diffMs / (1000 * 60 * 60));
+        const daysLeft = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        if (diffMs <= 0) {
+          licenseStatus.textContent = "License expired.";
+          isPro = false;
+        } else {
+          licenseStatus.textContent = daysLeft >= 1 ? `License valid for ${daysLeft} day(s)` : `License valid for ${hoursLeft} hour(s)`;
+        }
+      } else {
+        licenseStatus.textContent = "Pro access active.";
+      }
+      localStorage.setItem("shrinkifly_license", JSON.stringify({ valid: true, key, expiresAt }));
     }
-  } else {
-    licenseStatus.textContent = "Pro access active.";
-  }
-
-  // Save license regardless of admin/pro
-  localStorage.setItem("shrinkifly_license", JSON.stringify({ valid: true, key, expiresAt }));
-}
-
     function activateFree() {
       isPro = false;
       modeText.innerText = "Free";
@@ -308,44 +455,26 @@
       licenseStatus.textContent = "";
       localStorage.removeItem("shrinkifly_license");
     }
-
     function enableDropArea() {
-      dropArea.addEventListener('click', () => {
-        fileInput.click();
-      });
-    
-      dropArea.addEventListener('dragover', (e) => {
-        e.preventDefault(); // <- this is crucial
-        dropArea.classList.add('dragover');
-      });
-    
-      dropArea.addEventListener('dragleave', () => {
-        dropArea.classList.remove('dragover');
-      });
-    
+      dropArea.addEventListener('click', () => { fileInput.click(); });
+      dropArea.addEventListener('dragover', (e) => { e.preventDefault(); dropArea.classList.add('dragover'); });
+      dropArea.addEventListener('dragleave', () => { dropArea.classList.remove('dragover'); });
       dropArea.addEventListener('drop', (e) => {
-        e.preventDefault(); // <- this prevents default browser behavior
+        e.preventDefault();
         dropArea.classList.remove('dragover');
         const files = e.dataTransfer.files;
         handleFiles(files);
       });
     }
-
-
-    qualityRange.addEventListener('input', () => {
-      qualityValue.textContent = qualityRange.value;
-    });
-
+    qualityRange.addEventListener('input', () => { qualityValue.textContent = qualityRange.value; });
     compressBtn.addEventListener('click', compressImages);
     fileInput.addEventListener('change', e => {
       if (dropSource) {
-        dropSource = false; // Reset flag
-        return; // Skip handling because drop already triggered it
+        dropSource = false;
+        return;
       }
       handleFiles(e.target.files);
     });
-
-
     function handleFiles(files) {
       let selectedFiles = Array.from(files);
       if (!isPro && selectedFiles.length > 1) {
@@ -353,101 +482,80 @@
         selectedFiles = [selectedFiles[0]];
       }
       uploadedFiles = selectedFiles;
-
       if (isPro) {
         compressImages();
       }
     }
-
-    // UPDATED compressImages using async/await
-async function compressImages() {
-  if (!uploadedFiles.length) {
-    alert('Please upload at least one image.');
-    return;
-  }
-
-  previewContainer.innerHTML = '';
-  compressedBlobs = [];
-
-  for (const file of uploadedFiles) {
-    try {
-      const blob = await compressImage(file);
-      const format = formatSelect.value;
-      const url = URL.createObjectURL(blob);
-      const name = `compressed_${file.name.split('.')[0]}.${format.split('/')[1]}`;
-      
-      compressedBlobs.push({ blob, name });
-
-      const previewItem = document.createElement('div');
-      previewItem.className = 'preview-item';
-          
-      const previewImg = document.createElement('img');
-      previewImg.src = url;
-
-      const fileNameDiv = document.createElement('div');
-      fileNameDiv.className = 'filename';
-      fileNameDiv.innerText = file.name;
-      fileNameDiv.style.marginTop = '0.5rem';
-      fileNameDiv.style.fontSize = '0.9rem';
-      fileNameDiv.style.color = '#374151';  // Tailwind gray-700
-      fileNameDiv.style.wordBreak = 'break-all';  // Handle long names
-          
-      const info = document.createElement('div');
-      info.className = 'size-info';
-      info.innerText = `Original: ${(file.size / 1024).toFixed(2)} KB | Compressed: ${(blob.size / 1024).toFixed(2)} KB`;
-          
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = name;
-      link.className = 'download-link';
-      link.innerText = 'Download';
-          
-      // Append all to the wrapper div
-      previewItem.appendChild(previewImg);
-      previewItem.appendChild(fileNameDiv);
-      previewItem.appendChild(info);
-      previewItem.appendChild(link);
-          
-      // Append the wrapper to the preview container
-      previewContainer.appendChild(previewItem);
-
-    } catch (err) {
-      console.error(`Compression failed for ${file.name}:`, err);
+    async function compressImages() {
+      if (!uploadedFiles.length) {
+        alert('Please upload at least one image.');
+        return;
+      }
+      previewContainer.innerHTML = '';
+      compressedBlobs = [];
+      for (const file of uploadedFiles) {
+        try {
+          const blob = await compressImage(file);
+          const format = formatSelect.value;
+          const url = URL.createObjectURL(blob);
+          const name = `compressed_${file.name.split('.')[0]}.${format.split('/')[1]}`;
+          compressedBlobs.push({ blob, name });
+          const previewItem = document.createElement('div');
+          previewItem.className = 'preview-item';
+          const previewImg = document.createElement('img');
+          previewImg.src = url;
+          const fileNameDiv = document.createElement('div');
+          fileNameDiv.className = 'filename';
+          fileNameDiv.innerText = file.name;
+          fileNameDiv.style.marginTop = '0.5rem';
+          fileNameDiv.style.fontSize = '0.9rem';
+          fileNameDiv.style.color = '#374151';
+          fileNameDiv.style.wordBreak = 'break-all';
+          const info = document.createElement('div');
+          info.className = 'size-info';
+          info.innerText = `Original: ${(file.size / 1024).toFixed(2)} KB | Compressed: ${(blob.size / 1024).toFixed(2)} KB`;
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = name;
+          link.className = 'download-link';
+          link.innerText = 'Download';
+          previewItem.appendChild(previewImg);
+          previewItem.appendChild(fileNameDiv);
+          previewItem.appendChild(info);
+          previewItem.appendChild(link);
+          previewContainer.appendChild(previewItem);
+        } catch (err) {
+          console.error(`Compression failed for ${file.name}:`, err);
+        }
+      }
     }
-  }
-}
-
-
-// Helper function to compress one image and return a blob
-function compressImage(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = function(event) {
-      const img = new Image();
-      img.onload = function() {
-        const canvas = document.createElement('canvas');
-        const scale = Math.min(1, 1024 / img.width);
-        canvas.width = img.width * scale;
-        canvas.height = img.height * scale;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        const format = formatSelect.value;
-        const quality = format === 'image/png' ? undefined : parseFloat(qualityRange.value);
-        canvas.toBlob(blob => {
-          if (blob) {
-            resolve(blob);
-          } else {
-            reject(new Error("Blob creation failed"));
-          }
-        }, format, quality);
-      };
-      img.src = event.target.result;
-    };
-    reader.readAsDataURL(file);
-  });
-}
-
-
+    function compressImage(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const img = new Image();
+          img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const scale = Math.min(1, 1024 / img.width);
+            canvas.width = img.width * scale;
+            canvas.height = img.height * scale;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            const format = formatSelect.value;
+            const quality = format === 'image/png' ? undefined : parseFloat(qualityRange.value);
+            canvas.toBlob(blob => {
+              if (blob) {
+                resolve(blob);
+              } else {
+                reject(new Error("Blob creation failed"));
+              }
+            }, format, quality);
+          };
+          img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
     downloadAllBtn.addEventListener('click', () => {
       const zip = new JSZip();
       compressedBlobs.forEach(({ blob, name }) => zip.file(name, blob));
