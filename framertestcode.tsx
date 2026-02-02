@@ -397,186 +397,182 @@ export default function ShrinkiFly(props: ShrinkiFlyProps) {
     }
 
     return (
-        <div style={styles.container}>
-            <div style={styles.header}>
-                <div style={styles.titleContainer}>
-                    <img
-                        src={logoSrc}
-                        alt="ShrinkiFly Logo"
-                        style={styles.logo}
-                    />
-                    <h1 style={styles.title}>ShrinkiFly</h1>
-                </div>
-                <p style={styles.tagline}>Fast & Easy Image Compression</p>
-                <p style={styles.subtitle}>Mode: {isPro ? "Pro" : "Free"}</p>
-                {statusMessage && (
-                    <p style={styles.statusMessage}>{statusMessage}</p>
-                )}
-            </div>
-
-            <div
-                style={{
-                    ...styles.dropZone,
-                    ...(!isPro && styles.dropZoneFree),
-                    ...(isPro && isDragging && styles.dropZoneDragging),
-                }}
-                onDragEnter={handleDragEnter}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-                onClick={() => {
-                    if (isPro) {
-                        const fileInput = document.getElementById(
-                            "fileInput-shrinkifly"
-                        )
-                        if (fileInput) {
-                            ;(fileInput as HTMLInputElement).click()
-                        }
-                    }
-                }}
-            >
-                <input
-                    type="file"
-                    id="fileInput-shrinkifly"
-                    accept="image/*"
-                    multiple={isPro}
-                    style={{ display: "none" }}
-                    onChange={(e) => {
-                        if (e.target.files) {
-                            handleFileProcessing(e.target.files)
-                        }
-                    }}
+    <div style={styles.container}>
+        <div style={styles.header}>
+            <div style={styles.titleContainer}>
+                <img
+                    src={logoSrc}
+                    alt="ShrinkiFly Logo"
+                    style={styles.logo}
                 />
-                <p
-                    style={
-                        isPro ? styles.dropZoneText : styles.dropZoneTextFree
-                    }
-                >
-                    {isPro
-                        ? isProcessing
-                            ? "Processing..."
-                            : "Drag & drop images here, or click to select"
-                        : "Upgrade to Pro to enable drag & drop"}
-                </p>
+                <h1 style={styles.title}>ShrinkiFly</h1>
             </div>
-
-            <div style={styles.controlsContainer}>
-                {/* ... Controls are always visible ... */}
-                <div style={styles.controlGroup}>
-                    <label style={styles.label} htmlFor="formatSelect">
-                        Output Format
-                    </label>
-                    <select
-                        id="formatSelect"
-                        style={styles.select}
-                        value={format}
-                        onChange={(e) => setFormat(e.target.value)}
-                        disabled={isProcessing}
-                    >
-                        <option value="image/jpeg">JPEG</option>
-                        <option value="image/png">PNG</option>
-                        <option value="image/webp">WebP</option>
-                    </select>
-                </div>
-                {format !== "image/png" && (
-                    <div style={styles.controlGroup}>
-                        <label style={styles.label} htmlFor="qualityRange">
-                            Quality: {quality}
-                        </label>
-                        <input
-                            id="qualityRange"
-                            type="range"
-                            style={styles.range}
-                            min="0.1"
-                            max="1"
-                            step="0.05"
-                            value={quality}
-                            onChange={(e) =>
-                                setQuality(parseFloat(e.target.value))
-                            }
-                            disabled={isProcessing}
-                        />
-                    </div>
-                )}
-            </div>
-
-            {!isPro && !isLoading && (
-                <div style={styles.licenseContainer}>
-                    <input
-                        type="text"
-                        placeholder="Enter Pro License Key"
-                        style={styles.licenseInput}
-                        value={licenseKeyInput}
-                        onChange={(e) => setLicenseKeyInput(e.target.value)}
-                    />
-                    <button
-                        style={{
-                            ...styles.licenseButton,
-                            ...(isLoading && styles.licenseButtonDisabled),
-                        }}
-                        onClick={handleValidateKey}
-                        disabled={isLoading}
-                    >
-                        {isLoading ? "Validating..." : "Unlock Pro"}
-                    </button>
-                    <a
-                        href={purchaseUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={styles.upgradeLink}
-                    >
-                        Don't have a key? Purchase Pro License
-                    </a>
-                </div>
+            <p style={styles.tagline}>Fast & Easy Image Compression</p>
+            <p style={styles.subtitle}>Mode: {isPro ? "Pro" : "Free"}</p>
+            {statusMessage && (
+                <p style={styles.statusMessage}>{statusMessage}</p>
             )}
-
-            {isPro && compressedResults.length > 1 && (
-                <button
-                    style={{
-                        ...styles.button,
-                        ...styles.downloadAllButton,
-                        ...(isProcessing
-                            ? styles.downloadAllButtonDisabled
-                            : {}),
-                    }}
-                    onClick={handleDownloadAll}
+        </div>
+        <div
+            style={{
+                ...styles.dropZone,
+                ...(!isPro && styles.dropZoneFree),
+                ...(isPro && isDragging && styles.dropZoneDragging),
+            }}
+            onDragEnter={handleDragEnter}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            onClick={() => {
+                if (isPro) {
+                    const fileInput = document.getElementById(
+                        "fileInput-shrinkifly"
+                    )
+                    if (fileInput) {
+                        ;(fileInput as HTMLInputElement).click()
+                    }
+                }
+            }}
+        >
+            <input
+                type="file"
+                id="fileInput-shrinkifly"
+                accept="image/*"
+                multiple={isPro}
+                style={{ display: "none" }}
+                onChange={(e) => {
+                    if (e.target.files) {
+                        handleFileProcessing(e.target.files)
+                    }
+                }}
+            />
+            <p
+                style={
+                    isPro ? styles.dropZoneText : styles.dropZoneTextFree
+                }
+            >
+                {isPro
+                    ? isProcessing
+                        ? "Processing..."
+                        : "Drag & drop images here, or click to select"
+                    : "Upgrade to Pro to enable drag & drop"}
+            </p>
+        </div>
+        <div style={styles.controlsContainer}>
+            {/* ... Controls are always visible ... */}
+            <div style={styles.controlGroup}>
+                <label style={styles.label} htmlFor="formatSelect">
+                    Output Format
+                </label>
+                <select
+                    id="formatSelect"
+                    style={styles.select}
+                    value={format}
+                    onChange={(e) => setFormat(e.target.value)}
                     disabled={isProcessing}
                 >
-                    Download All as ZIP
-                </button>
-            )}
-            {compressedResults.length > 0 && (
-                <div style={styles.resultsContainer}>
-                    {compressedResults.map(
-                        ({ previewUrl, name, blob, originalSize }) => (
-                            <div key={name} style={styles.resultItem}>
-                                <img
-                                    src={previewUrl}
-                                    alt={name}
-                                    style={styles.resultThumb}
-                                />
-                                <div style={styles.resultInfo}>
-                                    <p style={styles.resultFilename}>{name}</p>
-                                    <p style={styles.resultSize}>
-                                        {formatBytes(originalSize)} →{" "}
-                                        <strong>
-                                            {formatBytes(blob.size)}
-                                        </strong>
-                                    </p>
-                                </div>
-                                <a
-                                    href={previewUrl}
-                                    download={name}
-                                    style={styles.resultDownloadLink}
-                                >
-                                    Download
-                                </a>
-                            </div>
-                        )
-                    )}
+                    <option value="image/jpeg">JPEG</option>
+                    <option value="image/png">PNG</option>
+                    <option value="image/webp">WebP</option>
+                </select>
+            </div>
+            {format !== "image/png" && (
+                <div style={styles.controlGroup}>
+                    <label style={styles.label} htmlFor="qualityRange">
+                        Quality: {quality}
+                    </label>
+                    <input
+                        id="qualityRange"
+                        type="range"
+                        style={styles.range}
+                        min="0.1"
+                        max="1"
+                        step="0.05"
+                        value={quality}
+                        onChange={(e) =>
+                            setQuality(parseFloat(e.target.value))
+                        }
+                        disabled={isProcessing}
+                    />
                 </div>
             )}
         </div>
+        {!isPro && !isLoading && (
+            <div style={styles.licenseContainer}>
+                <input
+                    type="text"
+                    placeholder="Enter Pro License Key"
+                    style={styles.licenseInput}
+                    value={licenseKeyInput}
+                    onChange={(e) => setLicenseKeyInput(e.target.value)}
+                />
+                <button
+                    style={{
+                        ...styles.licenseButton,
+                        ...(isLoading && styles.licenseButtonDisabled),
+                    }}
+                    onClick={handleValidateKey}
+                    disabled={isLoading}
+                >
+                    {isLoading ? "Validating..." : "Unlock Pro"}
+                </button>
+                <a
+                    href={purchaseUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={styles.upgradeLink}
+                >
+                    Don't have a key? Purchase Pro License
+                </a>
+            </div>
+        )}
+        {isPro && compressedResults.length > 1 && (
+            <button
+                style={{
+                    ...styles.button,
+                    ...styles.downloadAllButton,
+                    ...(isProcessing
+                        ? styles.downloadAllButtonDisabled
+                        : {}),
+                }}
+                onClick={handleDownloadAll}
+                disabled={isProcessing}
+            >
+                Download All as ZIP
+            </button>
+        )}
+        {compressedResults.length > 0 && (
+            <div style={styles.resultsContainer}>
+                {compressedResults.map(
+                    ({ previewUrl, name, blob, originalSize }) => (
+                        <div key={name} style={styles.resultItem}>
+                            <img
+                                src={previewUrl}
+                                alt={name}
+                                style={styles.resultThumb}
+                            />
+                            <div style={styles.resultInfo}>
+                                <p style={styles.resultFilename}>{name}</p>
+                                <p style={styles.resultSize}>
+                                    {formatBytes(originalSize)} →{" "}
+                                    <strong>
+                                        {formatBytes(blob.size)}
+                                    </strong>
+                                </p>
+                            </div>
+                            <a
+                                href={previewUrl}
+                                download={name}
+                                style={styles.resultDownloadLink}
+                            >
+                                Download
+                            </a>
+                        </div>
+                    )
+                )}
+            </div>
+        )}
+    </div>
     )
 }
 
