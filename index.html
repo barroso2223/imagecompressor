@@ -21,44 +21,505 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Alumni+Sans:ital,wght@0,100..900;1,100..900&family=Poppins:wght@100;200;300;400;500;600&family=Rye&family=Shantell+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="normalize.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/img-comparison-slider/7.8.4/index.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/img-comparison-slider/7.8.4/styles.css">
     <style>
-        body{font-family:Arial,sans-serif;background:#f9fafb;color:#111827;margin:0;padding:0}
-        .page-wrapper{display:flex;justify-content:center;gap:1.5rem;padding:0 1rem;max-width:1300px;margin:0 auto}
-        .main-content{max-width:600px;width:100%;margin:2rem 0;text-align:center;padding:1rem;box-shadow:0 0 10px rgba(0,0,0,0.1);border-radius:12px;background:#fff;flex-shrink:0}
-        .ad-container{display:flex;justify-content:center;align-items:flex-start;margin-top:2rem;min-width:160px}
-        .ad-sidebar{display:none}
-        .ad-mobile{display:block;max-width:600px;margin:1.5rem auto;padding:0 1rem}
-        @media (min-width:992px){.ad-sidebar{display:block;flex:1}.ad-mobile{display:none}}
-        .additional-content{max-width:800px;margin:2rem auto;padding:1rem 2rem;background:#fff;border-radius:12px;box-shadow:0 0 10px rgba(0,0,0,0.1);text-align:left}
-        .additional-content h2{font-family:'Poppins',sans-serif;color:#111827;border-bottom:2px solid #e5e7eb;padding-bottom:.5rem;margin-bottom:1rem}
-        .additional-content h3{font-family:'Poppins',sans-serif;font-size:1.1rem;font-weight:600;color:#374151;margin-top:1.5rem}
-        .additional-content p{line-height:1.6;color:#4b5563}
-        .ad-top-banner{max-width:970px;margin:1rem auto;padding:0 1rem;display:flex;justify-content:center}
-        .ad-bottom-banner{max-width:800px;margin:2.5rem auto 1.5rem;padding:0 1rem;display:flex;justify-content:center}
-        .site-footer{text-align:center;margin-top:3rem;padding:2rem 1rem;border-top:1px solid #e5e7eb;color:#6B7280;font-size:.9rem}
-        .site-footer a{color:#4F46E5;text-decoration:none;margin:0 10px}
-        .site-footer a:hover{text-decoration:underline}
-        .site-footer p{margin:.5rem 0}
-        input,select{margin:1rem 0;padding:.5rem;width:100%;max-width:300px;font-size:1rem}
-        label{display:block;margin-top:1rem}
-        button{margin-top:1.5rem;padding:.75rem 1.5rem;font-size:1rem;background-color:#4F46E5;color:#fff;border:none;border-radius:8px;cursor:pointer}
-        button:disabled{background:#999;cursor:not-allowed}
-        #previewContainer img{margin-top:1rem;max-width:100%;max-height:300px;border-radius:8px;box-shadow:0 0 6px rgba(0,0,0,0.15)}
-        .download-link{display:inline-block;margin-top:1rem;font-weight:700;color:#14B8A6;text-decoration:underline;cursor:pointer}
-        .size-info{margin-top:.5rem;font-size:.9rem;color:#6B7280}
-        #dropArea{display:none;border:2px dashed #4F46E5;padding:2rem;margin:1rem 0;border-radius:10px;cursor:pointer;background:#fff}
-        #dropArea.dragover{background-color:#e0e7ff}
-        #downloadAllBtn{display:none;margin-top:1rem;background-color:#10B981}
-        .preview-item{margin-top:1rem;padding:1rem;background:#fff;border-radius:10px;box-shadow:0 0 5px rgba(0,0,0,0.1);text-align:center}
-        .filename{margin-top:.5rem;font-size:.9rem;color:#374151;word-break:break-word}
-        .shrinkiFlyLogo{font-family:"Poppins",sans-serif;font-weight:600;font-style:italic}
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            color: #1f2937;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        /* Layout */
+        .page-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            padding: 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Main Content Card */
+        .main-content {
+            max-width: 700px;
+            width: 100%;
+            margin: 2rem 0;
+            padding: 2.5rem;
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            flex-shrink: 0;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Logo */
+        .shrinkiFlyLogo {
+            font-family: "Poppins", sans-serif;
+            font-weight: 700;
+            font-style: italic;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .shrinkiFlyLogo img {
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        /* Status Badge */
+        #status {
+            display: inline-block;
+            padding: 0.5rem 1.25rem;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            margin: 1rem 0;
+        }
+
+        #status strong {
+            font-weight: 700;
+        }
+
+        #license-status {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: #059669;
+            font-weight: 600;
+        }
+
+        /* Upgrade Card */
+        #upgradeCard {
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(79, 70, 229, 0.15);
+            margin: 2rem 0;
+            border: 2px solid rgba(79, 70, 229, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #upgradeCard:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px rgba(79, 70, 229, 0.25);
+        }
+
+        #upgradeCard h3 {
+            margin-top: 0;
+            color: #4f46e5;
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        #upgradeCard a {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.875rem;
+        }
+
+        #upgradeCard a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(16, 185, 129, 0.5);
+        }
+
+        /* Form Elements */
+        label {
+            display: block;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-input-wrapper {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            margin: 1rem 0;
+        }
+
+        .file-input-wrapper:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(102, 126, 234, 0.5);
+        }
+
+        select, input[type="text"] {
+            width: 100%;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        select:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Quality Slider */
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: linear-gradient(to right, #667eea 0%, #764ba2 100%);
+            outline: none;
+            -webkit-appearance: none;
+            margin: 1rem 0;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border: 3px solid #667eea;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border: 3px solid #667eea;
+        }
+
+        #qualityValue {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+
+        /* Buttons */
+        button {
+            margin-top: 1.5rem;
+            padding: 1rem 2.5rem;
+            font-size: 1rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(102, 126, 234, 0.5);
+        }
+
+        button:disabled {
+            background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #compressBtn {
+            width: 100%;
+            font-size: 1.125rem;
+            padding: 1.25rem;
+        }
+
+        #downloadAllBtn {
+            display: none;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        #downloadAllBtn:hover {
+            box-shadow: 0 12px 28px rgba(16, 185, 129, 0.5);
+        }
+
+        #unlockBtn {
+            width: 100%;
+        }
+
+        /* Drop Area */
+        #dropArea {
+            display: none;
+            border: 3px dashed #667eea;
+            padding: 3rem;
+            margin: 1.5rem 0;
+            border-radius: 20px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        #dropArea:hover {
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+            border-color: #764ba2;
+            transform: scale(1.02);
+        }
+
+        #dropArea.dragover {
+            background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%);
+            border-color: #764ba2;
+            transform: scale(1.05);
+        }
+
+        /* Preview Container */
+        #previewContainer {
+            margin-top: 2rem;
+        }
+
+        .preview-item {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e5e7eb;
+        }
+
+        .preview-item img {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .filename {
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            color: #6b7280;
+            font-weight: 500;
+            word-break: break-word;
+        }
+
+        .size-info {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
+
+        /* Image Comparison Slider */
+        img-comparison-slider {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Ads */
+        .ad-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            margin-top: 2rem;
+            min-width: 160px;
+        }
+
+        .ad-sidebar {
+            display: none;
+            min-width: 160px;
+            background: white;
+            border-radius: 16px;
+            padding: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .ad-top-banner, .ad-bottom-banner {
+            max-width: 970px;
+            min-width: 320px;
+            width: 100%;
+            margin: 1.5rem auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        @media (min-width: 992px) {
+            .ad-sidebar {
+                display: block;
+                flex: 1;
+            }
+        }
+
+        /* Additional Content */
+        .additional-content {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 2.5rem;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        .additional-content h2 {
+            font-family: 'Poppins', sans-serif;
+            color: #1f2937;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid;
+            border-image: linear-gradient(to right, #667eea, #764ba2) 1;
+        }
+
+        .additional-content h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #4f46e5;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .additional-content p, .additional-content ul {
+            line-height: 1.8;
+            color: #4b5563;
+            font-size: 1rem;
+        }
+
+        .additional-content ul {
+            padding-left: 1.5rem;
+        }
+
+        .additional-content li {
+            margin-bottom: 0.75rem;
+        }
+
+        /* Footer */
+        .site-footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2.5rem 1rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .site-footer a {
+            color: #667eea;
+            text-decoration: none;
+            margin: 0 1rem;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .site-footer a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .site-footer p {
+            margin: 0.5rem 0;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1.5rem;
+                margin: 1rem 0;
+                border-radius: 16px;
+            }
+
+            .additional-content {
+                padding: 1.5rem;
+                margin: 2rem auto;
+            }
+
+            button {
+                padding: 0.875rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            #upgradeCard {
+                padding: 1.5rem;
+            }
+
+            .shrinkiFlyLogo {
+                font-size: 1.75rem;
+            }
+        }
+
+        /* Loading Animation */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        button:disabled {
+            animation: pulse 2s ease-in-out infinite;
+        }
     </style>
 </head>
 <body>
@@ -109,12 +570,13 @@
     <div id="license-status" style="margin-top: 10px; font-weight: bold; color: green;"></div>
 
     <div id="dropArea">Drag and drop your image(s) here or click to select</div>
-    <input type="file" id="fileInput" accept="image/*" />
+    <input type="file" id="fileInput" accept="image/*,.heic,.heif" />
     <label for="formatSelect">Select output format:</label>
     <select id="formatSelect">
         <option value="image/jpeg">JPEG</option>
         <option value="image/png">PNG</option>
         <option value="image/webp">WebP</option>
+        <option value="application/pdf">PDF</option>
     </select>
     <label for="qualityRange">Compression quality (JPEG/WebP): <span id="qualityValue">0.8</span></label>
     <input type="range" id="qualityRange" min="0.1" max="1" step="0.05" value="0.8" />
@@ -162,7 +624,81 @@
         </div>
         <div>
             <h3>What image formats do you support?</h3>
-            <p>You can upload most standard image formats. For output, you can choose between <strong>JPEG</strong>, <strong>PNG</strong>, and <strong>WebP</strong>. For JPEG and WebP formats, you can also adjust the compression quality to find the perfect balance between file size and image clarity.</p>
+            <p>You can upload JPEG, PNG, WebP, GIF, and <strong>HEIC/HEIF</strong> (Apple's iPhone format). For output, you can convert to <strong>JPEG</strong>, <strong>PNG</strong>, <strong>WebP</strong>, or <strong>PDF</strong>. HEIC images are automatically converted to JPEG for processing. You can also adjust the compression quality slider to find the perfect balance between file size and image clarity.</p>
+        </div>
+        <div>
+            <h3>What's the difference between JPEG, PNG, WebP, and PDF?</h3>
+            <p><strong>JPEG</strong> is best for photographs and complex images with many colors. It uses lossy compression, which reduces file size significantly but may lose some detail. <strong>PNG</strong> is perfect for graphics, logos, and images with transparency. It uses lossless compression, maintaining perfect quality at the cost of larger file sizes. <strong>WebP</strong> is a modern format developed by Google that combines the best of both worlds—smaller file sizes than JPEG with optional transparency support like PNG. <strong>PDF</strong> is ideal for sharing documents and images that need to maintain their layout across different devices and platforms.</p>
+        </div>
+        <div>
+            <h3>How much can I compress my images?</h3>
+            <p>Compression results vary depending on the original image format, content, and your selected quality settings. Typically, photographs can be reduced by 50-80% with minimal visible quality loss when using JPEG or WebP formats. PNG images can often be optimized by 20-40%. Our tool shows you the exact file size reduction for each image, so you can verify the results before downloading.</p>
+        </div>
+        <div>
+            <h3>Will compression reduce image quality?</h3>
+            <p>It depends on the format and quality setting you choose. JPEG and WebP use lossy compression, which can reduce quality slightly, but our default quality setting (0.8) provides an excellent balance between size reduction and visual fidelity. For most use cases, the quality loss is imperceptible. PNG compression is lossless, meaning the image quality remains identical to the original. You have full control over the quality slider to find your perfect balance.</p>
+        </div>
+    </section>
+
+    <section id="how-it-works" style="margin-top: 2.5rem;">
+        <h2>How Image Compression Works</h2>
+        <p>Image compression is the process of reducing the file size of an image while preserving as much visual quality as possible. When you upload an image to ShrinkiFly, our browser-based compression engine analyzes the image data and applies sophisticated algorithms to eliminate redundant information.</p>
+
+        <p>For <strong>lossy formats like JPEG and WebP</strong>, the compression works by simplifying color information and removing details that are less perceptible to the human eye. Think of it like cleaning up a very detailed painting—you remove the tiniest brush strokes that don't significantly impact the overall appearance, resulting in a lighter, faster-loading image.</p>
+
+        <p>For <strong>lossless formats like PNG</strong>, compression works differently. Instead of discarding information, it reorganizes the data more efficiently, similar to how a zip file compresses documents. The image remains pixel-perfect identical to the original, but the file size is still reduced through clever encoding techniques.</p>
+
+        <p>All processing happens entirely in your web browser using HTML5 Canvas technology. This means your images are never sent to external servers, ensuring complete privacy and security. The compression happens instantly on your own device, giving you immediate results without any upload wait times.</p>
+    </section>
+
+    <section id="tips" style="margin-top: 2.5rem;">
+        <h2>Tips for Best Compression Results</h2>
+        <ul style="line-height: 1.8; color: #374151;">
+            <li><strong>Choose the right format:</strong> Use JPEG for photos and complex images with gradients. Use PNG for graphics, logos, screenshots, and images that require transparency. Use WebP when you need the best compression for modern websites and don't need to support very old browsers.</li>
+
+            <li><strong>Adjust the quality slider:</strong> Start with our default setting of 0.8 (80% quality). For most images, this provides excellent visual results with significant size reduction. If you need smaller files and can tolerate minor quality loss, try 0.6-0.7. For critical images where quality is paramount, use 0.85-0.95.</li>
+
+            <li><strong>Resize before compressing:</strong> If you're displaying an image at 800 pixels wide on your website, there's no need to keep a 4000-pixel original. Resize your image to the actual display dimensions first, then compress it. This can dramatically reduce file size beyond what compression alone achieves.</li>
+
+            <li><strong>Compare results:</strong> ShrinkiFly shows you both the original and compressed file sizes. If a compressed image is larger than the original (which can happen with already-optimized images or simple graphics), the tool will warn you. In such cases, stick with the original file.</li>
+
+            <li><strong>Batch process with Pro:</strong> If you have multiple images to compress, upgrade to Pro to process up to 50 images at once and download them all as a convenient ZIP file. This saves tremendous time compared to processing images one by one.</li>
+
+            <li><strong>Test on different devices:</strong> After compressing, preview your images on various devices and screen sizes to ensure the quality meets your standards. What looks great on a desktop monitor should also look good on mobile phones and tablets.</li>
+        </ul>
+    </section>
+
+    <section id="use-cases" style="margin-top: 2.5rem;">
+        <h2>Popular Use Cases for Image Compression</h2>
+
+        <div style="margin-bottom: 1.5rem;">
+            <h3>Website Performance Optimization</h3>
+            <p>Large images are one of the primary causes of slow-loading websites. By compressing your images before uploading them to your website or content management system, you can dramatically improve page load times. Faster websites rank better in search engines, provide better user experiences, and reduce bounce rates. E-commerce sites, blogs, portfolios, and corporate websites all benefit from optimized images.</p>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+            <h3>Social Media Posting</h3>
+            <p>Social media platforms like Instagram, Facebook, Twitter, and LinkedIn often compress images automatically, which can lead to unpredictable quality loss. By pre-compressing your images with ShrinkiFly, you maintain control over how your photos look while ensuring they upload quickly and display beautifully across all platforms. This is especially valuable for influencers, marketers, and businesses that depend on high-quality visual content.</p>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+            <h3>Email Attachments</h3>
+            <p>Email providers typically limit attachment sizes to 10-25 MB. If you need to send multiple high-resolution photos via email, compression is essential. ShrinkiFly can reduce image sizes by 50-80%, allowing you to attach more photos per email and ensuring faster sending and receiving times for you and your recipients.</p>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+            <h3>Mobile App Development</h3>
+            <p>Mobile apps need to be as lightweight as possible to reduce download sizes and improve performance on cellular networks. Compressing app assets, icons, backgrounds, and in-app images helps create faster, more responsive applications that users love. This is critical for maintaining good app store ratings and user retention.</p>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+            <h3>Digital Photography and Portfolio</h3>
+            <p>Photographers and designers often need to share portfolios with clients or showcase work online. Original camera RAW or high-resolution JPEG files can be 10-50 MB each, making them impractical for web galleries or email. Compressing these images to web-friendly sizes while maintaining professional visual quality is crucial for presenting work effectively without sacrificing detail.</p>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+            <h3>Cloud Storage Management</h3>
+            <p>Cloud storage services like Google Drive, Dropbox, and OneDrive charge based on storage usage. By compressing your photo library before uploading, you can save significant storage space and reduce monthly costs. This is particularly valuable for backing up family photos, vacation pictures, or large image collections that would otherwise consume hundreds of gigabytes.</p>
         </div>
     </section>
 </div>
@@ -200,25 +736,38 @@ window.addEventListener('DOMContentLoaded', () => {
     let isPro = false;
     let uploadedFiles = [];
     let compressedBlobs = [];
-    let dropSource = false;
 
-    const savedLicense = JSON.parse(localStorage.getItem("shrinkifly_license"));
-    if (savedLicense && savedLicense.valid) {
-        if (savedLicense.key === "ADMIN-KEY-1234") {
-            activateFree(); // admin still sees Pro features
-        } else if (savedLicense.expiresAt) {
-            const now = new Date();
-            const expDate = new Date(savedLicense.expiresAt);
-            if (expDate > now) {
-                activatePro(savedLicense.key, savedLicense.expiresAt);
+    // Constants
+    const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
+    const MAX_BATCH_SIZE = 50; // Max images for Pro users
+    const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif', 'image/heic', 'image/heif'];
+
+    // Load saved license from localStorage
+    try {
+        const savedLicense = localStorage.getItem("shrinkifly_license");
+        if (savedLicense) {
+            const license = JSON.parse(savedLicense);
+            if (license && license.valid) {
+                if (license.expiresAt) {
+                    const now = new Date();
+                    const expDate = new Date(license.expiresAt);
+                    if (expDate > now) {
+                        activatePro(license.key, license.expiresAt);
+                    } else {
+                        localStorage.removeItem("shrinkifly_license");
+                        activateFree();
+                    }
+                } else {
+                    activatePro(license.key, license.expiresAt);
+                }
             } else {
-                localStorage.removeItem("shrinkifly_license");
                 activateFree();
             }
         } else {
-            activatePro(savedLicense.key, savedLicense.expiresAt);
+            activateFree();
         }
-    } else {
+    } catch (e) {
+        console.error("Error loading license:", e);
         activateFree();
     }
 
@@ -227,13 +776,11 @@ window.addEventListener('DOMContentLoaded', () => {
     function verifyLicense() {
         const key = licenseKeyInput.value.trim();
         if (!key) return alert("Enter a license key.");
-        if (key === "ADMIN-KEY-1234") {
-            activatePro(key, null, true);
-            alert("Admin access granted.");
-            licenseKeyInput.value = "";
-            licenseKeyInput.placeholder = "Admin Access";
-            return;
-        }
+
+        // Show loading state
+        unlockBtn.disabled = true;
+        unlockBtn.innerText = "Validating...";
+
         fetch("/api/validate-license", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -244,6 +791,19 @@ window.addEventListener('DOMContentLoaded', () => {
             const license = data.data?.license_key;
             if (data.valid && license?.status === 'active') {
                 const expiresAt = license.expires_at || null;
+
+                // Check if license is already expired
+                if (expiresAt) {
+                    const expDate = new Date(expiresAt);
+                    const now = new Date();
+                    if (expDate <= now) {
+                        alert("This license has expired.");
+                        unlockBtn.disabled = false;
+                        unlockBtn.innerText = "Unlock Pro";
+                        return;
+                    }
+                }
+
                 activatePro(key, expiresAt);
                 alert("License validated and Pro mode activated!");
                 licenseKeyInput.value = "";
@@ -251,28 +811,44 @@ window.addEventListener('DOMContentLoaded', () => {
             } else {
                 alert("Invalid or expired license key.");
             }
+            unlockBtn.disabled = false;
+            unlockBtn.innerText = "Unlock Pro";
         })
-        .catch(err => { console.error("License validation error:", err); alert("An error occurred validating your license."); });
+        .catch(err => {
+            console.error("License validation error:", err);
+            alert("An error occurred validating your license. Please check your internet connection and try again.");
+            unlockBtn.disabled = false;
+            unlockBtn.innerText = "Unlock Pro";
+        });
     }
 
-    function activatePro(key, expiresAt, isAdmin = false) {
+    function activatePro(key, expiresAt) {
         isPro = true;
-        modeText.innerText = isAdmin ? "Admin" : "Pro";
+        modeText.innerText = "Pro";
         fileInput.multiple = true;
         dropArea.style.display = 'block';
         enableDropArea();
         downloadAllBtn.style.display = 'inline-block';
 
-        if (isAdmin) licenseStatus.textContent = "Admin access: Unlimited";
-        else if (expiresAt) {
+        // Hide upgrade card
+        const upgradeCard = document.getElementById('upgradeCard');
+        if (upgradeCard) upgradeCard.style.display = 'none';
+
+        if (expiresAt) {
             const expDate = new Date(expiresAt);
             const now = new Date();
             const diffMs = expDate - now;
             const hoursLeft = Math.floor(diffMs / (1000*60*60));
             licenseStatus.textContent = `Pro license valid for ~${hoursLeft} hours`;
+        } else {
+            licenseStatus.textContent = "Pro license active";
         }
 
-        localStorage.setItem("shrinkifly_license", JSON.stringify({ valid: true, key, expiresAt }));
+        try {
+            localStorage.setItem("shrinkifly_license", JSON.stringify({ valid: true, key, expiresAt }));
+        } catch (e) {
+            console.error("Error saving license:", e);
+        }
         toggleAds();
     }
 
@@ -283,7 +859,16 @@ window.addEventListener('DOMContentLoaded', () => {
         dropArea.style.display = 'none';
         downloadAllBtn.style.display = 'none';
         licenseStatus.textContent = "";
-        localStorage.removeItem("shrinkifly_license");
+
+        // Show upgrade card
+        const upgradeCard = document.getElementById('upgradeCard');
+        if (upgradeCard) upgradeCard.style.display = 'block';
+
+        try {
+            localStorage.removeItem("shrinkifly_license");
+        } catch (e) {
+            console.error("Error removing license:", e);
+        }
         toggleAds();
     }
 
@@ -309,40 +894,238 @@ window.addEventListener('DOMContentLoaded', () => {
     fileInput.addEventListener('change', e => handleFiles(Array.from(e.target.files)));
 
     function handleFiles(files) {
+        // Check batch size limit for Pro users
+        if (isPro && files.length > MAX_BATCH_SIZE) {
+            alert(`Maximum ${MAX_BATCH_SIZE} images at once. Please select fewer files.`);
+            return;
+        }
+
+        // Free users can only process one image
+        if (!isPro && files.length > 1) {
+            alert("Batch processing is a Pro feature. Processing first image only.");
+            files = [files[0]];
+        }
+
+        let rejectedFiles = [];
         files.forEach(file => {
-            if (!file.type.startsWith('image/')) return;
+            // Validate file type
+            if (!ALLOWED_TYPES.includes(file.type)) {
+                rejectedFiles.push(`${file.name} (unsupported format)`);
+                return;
+            }
+
+            // Validate file size
+            if (file.size > MAX_FILE_SIZE) {
+                const sizeMB = (file.size / 1024 / 1024).toFixed(1);
+                rejectedFiles.push(`${file.name} (${sizeMB}MB - exceeds 50MB limit)`);
+                return;
+            }
+
             uploadedFiles.push(file);
             const reader = new FileReader();
             reader.onload = e => {
                 const img = document.createElement('img'); img.src = e.target.result;
                 const div = document.createElement('div'); div.className='preview-item'; div.appendChild(img);
                 const fn = document.createElement('div'); fn.className='filename'; fn.innerText=file.name; div.appendChild(fn);
+                const sizeInfo = document.createElement('div'); sizeInfo.className='size-info';
+                sizeInfo.innerText = `Original: ${(file.size / 1024).toFixed(1)} KB`;
+                div.appendChild(sizeInfo);
                 previewContainer.appendChild(div);
             };
             reader.readAsDataURL(file);
         });
+
+        if (rejectedFiles.length > 0) {
+            alert(`Some files were rejected:\n\n${rejectedFiles.join('\n')}\n\nSupported formats: JPEG, PNG, WebP, GIF, HEIC\nMaximum size: 50MB`);
+        }
     }
 
     compressBtn.addEventListener('click', async () => {
-        compressedBlobs = [];
-        for (const file of uploadedFiles) {
-            const img = await loadImage(file);
-            const canvas = document.createElement('canvas');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img,0,0);
-            const type = formatSelect.value;
-            const quality = parseFloat(qualityRange.value);
-            const blob = await new Promise(resolve => canvas.toBlob(resolve, type, quality));
-            compressedBlobs.push({ name: file.name, blob });
-            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download=file.name; a.className='download-link'; a.innerText=`Download ${file.name}`; previewContainer.appendChild(a);
+        if (uploadedFiles.length === 0) {
+            alert("Please select at least one image first.");
+            return;
         }
-        if (isPro && compressedBlobs.length>1) downloadAllBtn.style.display='inline-block';
-        else downloadAllBtn.style.display='none';
+
+        compressBtn.disabled = true;
+        compressBtn.innerText = "Processing...";
+        compressedBlobs = [];
+
+        for (let i = 0; i < uploadedFiles.length; i++) {
+            const file = uploadedFiles[i];
+            try {
+                const img = await loadImage(file);
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                if (!ctx) {
+                    alert(`Failed to process ${file.name}. Canvas context unavailable.`);
+                    continue;
+                }
+                ctx.drawImage(img, 0, 0);
+                const type = formatSelect.value;
+                const quality = parseFloat(qualityRange.value);
+
+                let blob;
+                let outputFileName = file.name;
+
+                // Handle PDF conversion
+                if (type === 'application/pdf') {
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF({
+                        orientation: img.width > img.height ? 'landscape' : 'portrait',
+                        unit: 'px',
+                        format: [img.width, img.height]
+                    });
+
+                    const imgData = canvas.toDataURL('image/jpeg', quality);
+                    pdf.addImage(imgData, 'JPEG', 0, 0, img.width, img.height);
+                    blob = pdf.output('blob');
+                    outputFileName = file.name.replace(/\.[^/.]+$/, '') + '.pdf';
+                } else {
+                    // Handle image formats
+                    blob = await new Promise(resolve => canvas.toBlob(resolve, type, quality));
+                    const ext = type.split('/')[1];
+                    outputFileName = file.name.replace(/\.[^/.]+$/, '') + '.' + ext;
+                }
+
+                if (!blob) {
+                    alert(`Failed to compress ${file.name}. Please try again.`);
+                    continue;
+                }
+
+                // Check if compressed is larger than original
+                const originalSize = file.size;
+                const compressedSize = blob.size;
+                const savings = ((originalSize - compressedSize) / originalSize * 100).toFixed(1);
+
+                compressedBlobs.push({ name: outputFileName, blob, originalSize });
+
+                // Create download link with size info
+                const linkDiv = document.createElement('div');
+                linkDiv.style.marginTop = '2rem';
+                linkDiv.style.padding = '1.5rem';
+                linkDiv.style.border = '1px solid #e5e7eb';
+                linkDiv.style.borderRadius = '8px';
+                linkDiv.style.background = '#f9fafb';
+
+                // Helper function to format file sizes
+                const formatSize = (bytes) => {
+                    if (bytes >= 1024 * 1024) {
+                        return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else {
+                        return (bytes / 1024).toFixed(1) + ' KB';
+                    }
+                };
+
+                // Add before/after comparison slider (only for non-PDF)
+                if (type !== 'application/pdf') {
+                    const comparisonContainer = document.createElement('div');
+                    comparisonContainer.style.marginBottom = '1rem';
+                    comparisonContainer.innerHTML = `
+                        <img-comparison-slider>
+                            <img slot="first" src="${URL.createObjectURL(file)}" style="width:100%;" />
+                            <img slot="second" src="${URL.createObjectURL(blob)}" style="width:100%;" />
+                        </img-comparison-slider>
+                    `;
+                    linkDiv.appendChild(comparisonContainer);
+                }
+
+                // Size comparison info
+                const sizeInfo = document.createElement('div');
+                sizeInfo.className = 'size-info';
+                sizeInfo.style.marginBottom = '1rem';
+                sizeInfo.style.fontSize = '14px';
+                sizeInfo.style.fontWeight = '600';
+
+                if (compressedSize >= originalSize) {
+                    sizeInfo.innerHTML = `
+                        <div style="color: #dc2626; margin-bottom: 0.5rem;">
+                            <strong>${file.name}</strong>
+                        </div>
+                        <div style="color: #dc2626;">
+                            ⚠️ Warning: Compressed file (${formatSize(compressedSize)}) is larger than original (${formatSize(originalSize)})
+                        </div>
+                        <div style="color: #6b7280; font-size: 12px; margin-top: 0.5rem;">
+                            Consider using original or different settings
+                        </div>
+                    `;
+                } else {
+                    sizeInfo.innerHTML = `
+                        <div style="color: #059669; margin-bottom: 0.5rem;">
+                            <strong>${file.name}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="color: #6b7280;">Before: ${formatSize(originalSize)}</span>
+                            <span style="color: #059669;">→ ${savings}% smaller</span>
+                            <span style="color: #059669;">After: ${formatSize(compressedSize)}</span>
+                        </div>
+                    `;
+                }
+
+                linkDiv.appendChild(sizeInfo);
+
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = outputFileName;
+                a.className = 'download-link';
+                a.style.display = 'inline-block';
+                a.style.padding = '0.75rem 1.5rem';
+                a.style.background = '#4F46E5';
+                a.style.color = 'white';
+                a.style.textDecoration = 'none';
+                a.style.borderRadius = '6px';
+                a.style.fontWeight = '600';
+                a.style.transition = 'background 0.2s';
+                a.innerText = `Download ${outputFileName}`;
+                a.onmouseover = () => a.style.background = '#4338CA';
+                a.onmouseout = () => a.style.background = '#4F46E5';
+                linkDiv.appendChild(a);
+
+                previewContainer.appendChild(linkDiv);
+            } catch (err) {
+                console.error(`Error processing ${file.name}:`, err);
+                alert(`Failed to process ${file.name}. ${err.message || 'Please try again.'}`);
+            }
+        }
+
+        compressBtn.disabled = false;
+        compressBtn.innerText = "Compress & Convert";
+
+        if (isPro && compressedBlobs.length > 1) downloadAllBtn.style.display = 'inline-block';
+        else downloadAllBtn.style.display = 'none';
     });
 
-    function loadImage(file){ return new Promise(resolve => { const img = new Image(); img.onload = () => resolve(img); img.src = URL.createObjectURL(file); }); }
+    async function loadImage(file) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let processedFile = file;
+
+                // Convert HEIC to JPEG first
+                if (file.type === 'image/heic' || file.type === 'image/heif' || file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif')) {
+                    try {
+                        const convertedBlob = await heic2any({
+                            blob: file,
+                            toType: 'image/jpeg',
+                            quality: 0.9
+                        });
+                        processedFile = Array.isArray(convertedBlob) ? convertedBlob[0] : convertedBlob;
+                    } catch (heicError) {
+                        console.error('HEIC conversion error:', heicError);
+                        reject(new Error('Failed to convert HEIC image. Please try a different file.'));
+                        return;
+                    }
+                }
+
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = () => reject(new Error('Failed to load image'));
+                img.src = URL.createObjectURL(processedFile);
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
 
     downloadAllBtn.addEventListener('click', async () => {
         const zip = new JSZip();

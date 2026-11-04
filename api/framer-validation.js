@@ -6,34 +6,47 @@ export default async function handler(req, res) {
     }
 
     const { license_key } = req.body;
+
     if (!license_key) {
-        return res.status(400).json({ valid: false, message: "License key is required." });
+        return res.status(400).json({ valid: false, error: "License key is required" });
     }
 
-    const LEMONSQUEEZY_API_KEY = process.env.LEMONSQUEEZY_API_KEY;
-
     try {
-        const response = await fetch("https://api.lemonsqueezy.com/v1/licenses/validate", {
+        const response = await fetch("https://api.lemonsqueezy.com/v1/licenses/activate", {
             method: "POST",
             headers: {
-                "Accept": "application/json",
+                "Authorization": `Bearer ${process.env.LEMONSQUEEZY_API_KEY}`,
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${LEMONSQUEEZY_API_KEY}`,
+                "Accept": "application/json"
             },
-            body: JSON.stringify({ license_key }),
+            body: JSON.stringify({
+                license_key,
+                instance_name: "ShrinkiFly",
+                metadata: { source: "image-compressor-app" }
+            })
         });
 
         const data = await response.json();
-        const isValid = data.valid && data.meta.status === 'active';
+        console.log("🍋 Validation response:", data);
 
-        if (isValid) {
-            return res.status(200).json({ valid: true, message: "License is active!", license_data: data });
-        } else {
-            return res.status(200).json({ valid: false, message: data.error || `License is not active. Status: ${data.meta.status}`, license_data: data });
-        }
+        // Check if activation was successful and license is active
+        const license = data.license_key;
+        const isValid = data.activated === true && license?.status === 'active' && !data.error;
+
+        return res.status(200).json({
+            valid: isValid,
+            data: {
+                license_key: {
+                    status: license?.status,
+                    expires_at: license?.expires_at,
+                    activation_limit: license?.activation_limit,
+                    activation_usage: license?.activation_usage
+                }
+            }
+        });
 
     } catch (error) {
-        console.error("License validation error:", error);
-        return res.status(500).json({ error: "Server error validating license" });
+        console.error("License activation error:", error);
+        return res.status(500).json({ valid: false, error: "Server error validating license" });
     }
 }

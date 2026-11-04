@@ -5,11 +5,15 @@ export default async function handler(req, res) {
 
   const { license_key } = req.body;
 
+  if (!license_key) {
+    return res.status(400).json({ valid: false, error: "License key is required" });
+  }
+
   try {
     const response = await fetch("https://api.lemonsqueezy.com/v1/licenses/activate", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${process.env.LEMON_SQUEEZY_API_KEY}`,
+        "Authorization": `Bearer ${process.env.LEMONSQUEEZY_API_KEY}`,
         "Content-Type": "application/json",
         "Accept": "application/json"
       },
@@ -23,12 +27,24 @@ export default async function handler(req, res) {
     const data = await response.json();
     console.log("🍋 Validation response:", data);
 
-    const isValid = data.license_key?.status === 'active' && !data.error;
+    // Check if activation was successful and license is active
+    const license = data.license_key;
+    const isValid = data.activated === true && license?.status === 'active' && !data.error;
 
-    return res.status(200).json({ valid: isValid, data });
+    return res.status(200).json({
+      valid: isValid,
+      data: {
+        license_key: {
+          status: license?.status,
+          expires_at: license?.expires_at,
+          activation_limit: license?.activation_limit,
+          activation_usage: license?.activation_usage
+        }
+      }
+    });
 
   } catch (error) {
     console.error("License activation error:", error);
-    return res.status(500).json({ error: "Server error validating license" });
+    return res.status(500).json({ valid: false, error: "Server error validating license" });
   }
 }
