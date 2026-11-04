@@ -177,22 +177,10 @@
             display: none;
         }
 
-        .file-input-wrapper {
-            display: inline-block;
-            padding: 1rem 2rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 600;
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
-            transition: all 0.3s ease;
-            margin: 1rem 0;
-        }
-
-        .file-input-wrapper:hover {
+        /* Upload Button Hover Effect */
+        label[for="fileInput"] div:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 28px rgba(102, 126, 234, 0.5);
+            box-shadow: 0 12px 28px rgba(102, 126, 234, 0.6) !important;
         }
 
         select, input[type="text"] {
@@ -568,6 +556,15 @@
 
     <p id="status">Mode: <strong id="mode">Free</strong></p>
     <div id="license-status" style="margin-top: 10px; font-weight: bold; color: green;"></div>
+
+    <!-- File Upload Button -->
+    <div style="margin: 2rem 0; text-align: center;">
+        <label for="fileInput" style="cursor: pointer;">
+            <div style="display: inline-block; padding: 1.25rem 2.5rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 50px; font-weight: 700; box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4); transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px; font-size: 1rem;">
+                📁 Choose Image(s)
+            </div>
+        </label>
+    </div>
 
     <div id="dropArea">Drag and drop your image(s) here or click to select</div>
     <input type="file" id="fileInput" accept="image/*,.heic,.heif" />
