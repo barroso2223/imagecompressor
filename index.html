@@ -777,6 +777,22 @@ window.addEventListener('DOMContentLoaded', () => {
         const key = licenseKeyInput.value.trim();
         if (!key) return alert("Enter a license key.");
 
+        // Admin override for site owner
+        // Set your secret admin key in Netlify env var: ADMIN_OVERRIDE_KEY
+        // This allows you to bypass license validation for testing/personal use
+        const adminKeys = [
+            'shrinkifly_admin_2024',  // Default admin key - CHANGE THIS!
+            // Add more admin keys here if needed
+        ];
+
+        if (adminKeys.includes(key)) {
+            activatePro(key, null);
+            alert("Admin access granted! Pro mode activated.");
+            licenseKeyInput.value = "";
+            licenseKeyInput.placeholder = "Admin verified";
+            return;
+        }
+
         // Show loading state
         unlockBtn.disabled = true;
         unlockBtn.innerText = "Validating...";
