@@ -26,9 +26,6 @@
     <noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600&display=swap" rel="stylesheet"></noscript>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"></noscript>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
     <style>
         /* Ensure fonts load without blocking */
         @font-face {
@@ -840,6 +837,43 @@ window.addEventListener('DOMContentLoaded', () => {
     const MAX_BATCH_SIZE = 50; // Max images for Pro users
     const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif', 'image/heic', 'image/heif'];
 
+    // Lazy-load libraries only when needed (performance optimization)
+    const loadedScripts = {};
+
+    async function loadScript(src, globalCheck) {
+        if (loadedScripts[src]) return;
+        if (globalCheck && window[globalCheck]) return; // Already loaded
+
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = () => {
+                loadedScripts[src] = true;
+                resolve();
+            };
+            script.onerror = reject;
+            document.head.appendChild(script);
+        });
+    }
+
+    async function ensureJSZip() {
+        if (!window.JSZip) {
+            await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js', 'JSZip');
+        }
+    }
+
+    async function ensureHEIC2ANY() {
+        if (!window.heic2any) {
+            await loadScript('https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js', 'heic2any');
+        }
+    }
+
+    async function ensureJSPDF() {
+        if (!window.jspdf) {
+            await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', 'jspdf');
+        }
+    }
+
     // Load saved license from localStorage
     try {
         const savedLicense = localStorage.getItem("shrinkifly_license");
@@ -1089,6 +1123,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
                 // Handle PDF conversion
                 if (type === 'application/pdf') {
+                    await ensureJSPDF(); // Lazy-load jsPDF only when needed
                     const { jsPDF } = window.jspdf;
                     const pdf = new jsPDF({
                         orientation: img.width > img.height ? 'landscape' : 'portrait',
@@ -1278,6 +1313,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 // Convert HEIC to JPEG first
                 if (file.type === 'image/heic' || file.type === 'image/heif' || file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif')) {
                     try {
+                        await ensureHEIC2ANY(); // Lazy-load HEIC converter only when needed
                         const convertedBlob = await heic2any({
                             blob: file,
                             toType: 'image/jpeg',
@@ -1302,6 +1338,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     downloadAllBtn.addEventListener('click', async () => {
+        await ensureJSZip(); // Lazy-load JSZip only when user clicks download all
         const zip = new JSZip();
         compressedBlobs.forEach(({name, blob})=> zip.file(name, blob));
         const content = await zip.generateAsync({type:"blob"});
