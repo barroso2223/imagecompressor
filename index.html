@@ -1133,15 +1133,15 @@ window.addEventListener('DOMContentLoaded', () => {
                     comparisonContainer.className = 'comparison-slider';
                     comparisonContainer.style.marginBottom = '1.5rem';
 
-                    const beforeUrl = URL.createObjectURL(file);
-                    const afterUrl = URL.createObjectURL(blob);
+                    const beforeUrl = URL.createObjectURL(file);  // Original file
+                    const afterUrl = URL.createObjectURL(blob);   // Compressed file
 
                     comparisonContainer.innerHTML = `
                         <div class="before-image">
-                            <img src="${afterUrl}" alt="After">
+                            <img src="${beforeUrl}" alt="Before - Original">
                         </div>
                         <div class="after-image">
-                            <img src="${beforeUrl}" alt="Before">
+                            <img src="${afterUrl}" alt="After - Compressed">
                         </div>
                         <div class="slider-handle">
                             <div class="slider-button"></div>
