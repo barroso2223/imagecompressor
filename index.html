@@ -360,9 +360,20 @@
 
         /* Image Comparison Slider */
         img-comparison-slider {
+            --divider-width: 4px;
+            --divider-color: rgba(255, 255, 255, 0.9);
+            --default-handle-opacity: 1;
+            --default-handle-width: 50px;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            display: block;
+            position: relative;
+        }
+
+        img-comparison-slider img {
+            display: block;
+            width: 100%;
+            height: auto;
         }
 
         /* Ads */
@@ -1034,12 +1045,31 @@ window.addEventListener('DOMContentLoaded', () => {
                 // Add before/after comparison slider (only for non-PDF)
                 if (type !== 'application/pdf') {
                     const comparisonContainer = document.createElement('div');
-                    comparisonContainer.style.marginBottom = '1rem';
+                    comparisonContainer.style.marginBottom = '1.5rem';
+                    comparisonContainer.style.position = 'relative';
+
                     comparisonContainer.innerHTML = `
-                        <img-comparison-slider>
-                            <img slot="first" src="${URL.createObjectURL(file)}" style="width:100%;" />
-                            <img slot="second" src="${URL.createObjectURL(blob)}" style="width:100%;" />
-                        </img-comparison-slider>
+                        <div style="position: relative; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);">
+                            <img-comparison-slider style="width: 100%;">
+                                <img slot="first" src="${URL.createObjectURL(file)}" style="width:100%; display: block;" />
+                                <img slot="second" src="${URL.createObjectURL(blob)}" style="width:100%; display: block;" />
+                            </img-comparison-slider>
+
+                            <!-- Before Label (Left) -->
+                            <div style="position: absolute; top: 16px; left: 16px; background: rgba(0, 0, 0, 0.75); color: white; padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 14px; pointer-events: none; z-index: 10; backdrop-filter: blur(8px);">
+                                Before (${formatSize(originalSize)})
+                            </div>
+
+                            <!-- After Label (Right) -->
+                            <div style="position: absolute; top: 16px; right: 16px; background: rgba(5, 150, 105, 0.9); color: white; padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 14px; pointer-events: none; z-index: 10; backdrop-filter: blur(8px);">
+                                After (${formatSize(compressedSize)})
+                            </div>
+
+                            <!-- Instruction Text -->
+                            <div style="position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.75); color: white; padding: 6px 12px; border-radius: 6px; font-size: 12px; pointer-events: none; z-index: 10; backdrop-filter: blur(8px); white-space: nowrap;">
+                                ← Drag slider to compare →
+                            </div>
+                        </div>
                     `;
                     linkDiv.appendChild(comparisonContainer);
                 }
