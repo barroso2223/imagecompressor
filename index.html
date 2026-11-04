@@ -1059,6 +1059,9 @@ window.addEventListener('DOMContentLoaded', () => {
         compressBtn.innerText = "Processing...";
         compressedBlobs = [];
 
+        // Clear preview container to remove original images
+        previewContainer.innerHTML = '';
+
         for (let i = 0; i < uploadedFiles.length; i++) {
             const file = uploadedFiles[i];
             try {
